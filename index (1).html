@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glomerulonephritis Flashcards</title>
+<style>
+  :root{
+    --bg:#e9eef2;--ink:#12314f;--ink-soft:#3d5872;--teal:#0e7c86;--teal-deep:#0a5960;
+    --paper:#ffffff;--line:#d5dee6;--nephritic:#b0492b;--nephrotic:#2f6fb5;--mixed:#6b4e9e;
+    --flag-bg:#fdf3e3;--flag-ink:#9a5b00;--flag-line:#e9b978;
+    --mono:"SFMono-Regular",ui-monospace,"Menlo","Consolas",monospace;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:18px 14px 40px}
+  .wrap{width:100%;max-width:760px}
+  header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .title{font-size:20px;font-weight:700;letter-spacing:.2px;line-height:1.1}
+  .title small{display:block;font-size:11px;font-weight:500;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase;margin-top:5px}
+  .count{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+  .count b{color:var(--ink);font-size:15px}
+  .modeswitch{display:inline-flex;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:3px;margin-bottom:12px;gap:3px}
+  .mode{font-family:var(--mono);font-size:11px;letter-spacing:.03em;text-transform:uppercase;border:none;background:transparent;color:var(--ink-soft);padding:8px 13px;border-radius:7px;cursor:pointer;transition:.12s}
+  .mode:hover{color:var(--teal-deep)}
+  .mode.on{background:var(--ink);color:#fff}
+  .controls{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:14px}
+  .chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);padding:6px 10px;border-radius:20px;cursor:pointer;user-select:none;transition:.12s}
+  .chip:hover{border-color:var(--teal)}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .chip.on.nephritic{background:var(--nephritic);border-color:var(--nephritic)}
+  .chip.on.nephrotic{background:var(--nephrotic);border-color:var(--nephrotic)}
+  .chip.on.mixed{background:var(--mixed);border-color:var(--mixed)}
+  .chip.on.review{background:var(--flag-ink);border-color:var(--flag-ink)}
+  .spacer{flex:1 1 auto}
+  .btn{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:6px 11px;border-radius:6px;cursor:pointer;transition:.12s}
+  .btn:hover{border-color:var(--teal);color:var(--teal-deep)}
+  .stage{perspective:1800px;margin-bottom:16px}
+  .card{position:relative;width:100%;min-height:440px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1);cursor:pointer}
+  .card.flipped{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px -18px rgba(18,49,79,.55);display:flex;flex-direction:column;overflow:hidden}
+  .face.back{transform:rotateY(180deg)}
+  .tab{height:8px;width:100%;flex:0 0 auto}
+  .tab.nephritic{background:var(--nephritic)}
+  .tab.nephrotic{background:var(--nephrotic)}
+  .tab.mixed{background:var(--mixed)}
+  .tab.neutral{background:var(--teal)}
+  .front .body{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px 28px;overflow-y:auto}
+  .cat-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px}
+  .cat-label.nephritic{color:var(--nephritic)}
+  .cat-label.nephrotic{color:var(--nephrotic)}
+  .cat-label.mixed{color:var(--mixed)}
+  .dx{font-size:30px;font-weight:750;line-height:1.08;letter-spacing:-.01em;margin-bottom:14px}
+  .stem{font-size:15px;color:var(--ink-soft);line-height:1.5;max-width:46ch;font-style:italic}
+  .qz{font-size:20px;font-weight:650;line-height:1.36;max-width:34ch;color:var(--ink)}
+  .front .body.vg{justify-content:flex-start;align-items:stretch;text-align:left;padding:22px 24px}
+  .vg-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-deep);margin-bottom:14px}
+  .vg-stem{font-size:15.5px;line-height:1.56;color:var(--ink);margin-bottom:18px}
+  .vg-q{border-left:3px solid var(--teal);background:#f1f7f7;padding:12px 14px;border-radius:0 8px 8px 0}
+  .vg-q .ql{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-deep);display:block;margin-bottom:6px}
+  .vg-q p{margin:0;font-size:15px;font-weight:650;color:var(--ink);line-height:1.42}
+  .flip-hint{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);padding:0 0 18px;text-align:center;opacity:.7}
+  .back .scroll{flex:1;overflow-y:auto;padding:16px 20px 18px}
+  .back .dx-mini{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .back .dx-mini .pip{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .pip.nephritic{background:var(--nephritic)}
+  .pip.nephrotic{background:var(--nephrotic)}
+  .pip.mixed{background:var(--mixed)}
+  .field{margin-bottom:12px}
+  .field:last-child{margin-bottom:0}
+  .fl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-deep);border-bottom:1px solid var(--line);padding-bottom:3px;margin-bottom:6px}
+  .field p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink)}
+  .field p + p{margin-top:5px}
+  .field .sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);margin-right:5px}
+  .field b{color:var(--ink)}
+  .back .ans p{font-size:14.5px}
+  .flag{background:var(--flag-bg);border:1px solid var(--flag-line);border-radius:8px;padding:9px 11px;margin-top:4px}
+  .flag .fl{color:var(--flag-ink);border-bottom-color:var(--flag-line)}
+  .flag p{color:#7a4b06;font-size:13px}
+  .navbar{display:flex;align-items:center;gap:10px}
+  .nav-btn{flex:0 0 auto;width:46px;height:46px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:20px;cursor:pointer;transition:.12s;display:flex;align-items:center;justify-content:center}
+  .nav-btn:hover{border-color:var(--teal);color:var(--teal-deep)}
+  .nav-btn:disabled{opacity:.35;cursor:default}
+  .assess{flex:1;display:flex;gap:8px}
+  .assess button{flex:1;padding:12px;border-radius:10px;border:1px solid var(--line);cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:600;transition:.12s;background:var(--paper)}
+  .assess .conf{color:var(--teal-deep)}
+  .assess .conf:hover,.assess .conf.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+  .assess .rev{color:var(--flag-ink)}
+  .assess .rev:hover,.assess .rev.active{background:var(--flag-ink);color:#fff;border-color:var(--flag-ink)}
+  .kbd{font-family:var(--mono);font-size:11px;color:var(--ink-soft);text-align:center;margin-top:16px;opacity:.75}
+  .kbd span{border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin:0 2px;background:var(--paper)}
+  @media(max-width:520px){.dx{font-size:25px}.card{min-height:500px}.assess button{font-size:12px}.qz{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="title">Glomerulonephritis &amp; Nephropathies<small>AT interview · learn · reason off the stem · recall cold</small></div>
+    <div class="count"><b id="posNow">1</b> / <span id="posTot">12</span> <span id="confTag" style="margin-left:8px"></span></div>
+  </header>
+
+  <div class="modeswitch">
+    <button class="mode on" data-mode="cards">Conditions</button>
+    <button class="mode" data-mode="vignettes">Vignettes</button>
+    <button class="mode" data-mode="recall">Recall test</button>
+  </div>
+
+  <div class="controls">
+    <div class="chip filt on" data-filt="all">All</div>
+    <div class="chip filt nephritic" data-filt="nephritic">Nephritic</div>
+    <div class="chip filt nephrotic" data-filt="nephrotic">Nephrotic</div>
+    <div class="chip filt mixed" data-filt="mixed">Mixed</div>
+    <div class="chip filt review" data-filt="review">Review only</div>
+    <div class="spacer"></div>
+    <button class="btn" id="shuffleBtn">Shuffle</button>
+    <button class="btn" id="resetBtn">Reset</button>
+  </div>
+
+  <div class="stage">
+    <div class="card" id="card">
+      <div class="face front">
+        <div class="tab" id="tabF"></div>
+        <div class="body" id="frontBody"></div>
+        <div class="flip-hint" id="flipHintF">Tap / press space to reveal</div>
+      </div>
+      <div class="face back">
+        <div class="tab" id="tabB"></div>
+        <div class="scroll" id="backScroll"></div>
+        <div class="flip-hint">Tap to flip back</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar">
+    <button class="nav-btn" id="prev">‹</button>
+    <div class="assess">
+      <button class="conf" id="confBtn">Confident</button>
+      <button class="rev" id="revBtn">Needs review</button>
+    </div>
+    <button class="nav-btn" id="next">›</button>
+  </div>
+
+  <div class="kbd"><span>Space</span> flip &nbsp; <span>←</span><span>→</span> navigate &nbsp; <span>S</span> shuffle</div>
+</div>
+
+<script>
+const CARDS = [
+  {id:"framework", cat:"mixed", dx:"Nephritic vs Nephrotic",
+    stem:"The orientation card. If you can place a case on this axis in the first 20 seconds, everything else follows.",
+    fields:[
+      {l:"Presentation", html:`<p><span class="sub">Nephritic</span> inflammatory. Haematuria (often visible / dysmorphic RBCs + <b>RBC casts</b>), subnephrotic proteinuria, hypertension, oliguria, AKI, oedema.</p><p><span class="sub">Nephrotic</span> podocyte / permeability. <b>Proteinuria &gt;3.5 g/day</b>, hypoalbuminaemia, oedema, hyperlipidaemia, lipiduria (oval fat bodies), hypercoagulability.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Urine</span> dysmorphic RBCs + casts → nephritic; bland with heavy protein / oval fat bodies → nephrotic. Quantify with <b>UPCR / UACR</b>.</p><p><span class="sub">Bloods</span> the discriminating panel: complement (C3/C4), ANA/anti-dsDNA, ANCA, anti-GBM, ASOT/anti-DNase B, hep B/C, cryoglobulins, SPEP/serum free light chains, anti-PLA2R.</p><p><span class="sub">Biopsy</span> LM (pattern), IF (immune deposits), EM (deposit location + foot processes) — the three reads that name the disease.</p>`},
+      {l:"Complement lens", html:`<p><b>Low C3/C4:</b> lupus, cryoglobulinaemia, endocarditis-associated.</p><p><b>Low C3, normal C4:</b> post-infectious GN, C3 glomerulopathy (alternative pathway).</p><p><b>Normal complement:</b> IgA nephropathy, anti-GBM, ANCA vasculitis (pauci-immune).</p>`},
+      {l:"Management principle", html:`<p>Every proteinuric / progressive GN sits on a <b>supportive "CKD bundle"</b>: max-tolerated RAS blockade, SGLT2 inhibitor, BP and cardiovascular risk control, salt restriction. Disease-specific immunosuppression is layered on top only where justified.</p>`}
+    ],
+    pearl:"RBC casts = glomerular bleeding until proven otherwise. Isolated visible haematuria with a normal complement in a young adult concurrent with a sore throat is IgA nephropathy, not post-strep — the timing separates them."},
+  {id:"iga", cat:"nephritic", dx:"IgA Nephropathy",
+    stem:"Young adult, visible haematuria appearing at the same time as a sore throat or gastro. Berger disease.",
+    fields:[
+      {l:"Presentation", html:`<p>Most commonly <b>synpharyngitic haematuria</b> — visible haematuria within 1–2 days of a mucosal (URTI or GI) infection. Also asymptomatic microscopic haematuria + subnephrotic proteinuria found on screening. Minority: nephrotic syndrome, AKI, or rapidly progressive (crescentic) disease.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Urine</span> dysmorphic RBCs, RBC casts, variable protein.</p><p><span class="sub">Bloods</span> <b>normal complement</b>; serum IgA raised in ~half (not diagnostic).</p><p><span class="sub">Biopsy</span> LM: mesangial proliferation. <b>IF: dominant mesangial IgA</b> (± C3, IgG). EM: mesangial/paramesangial deposits. Report with the <b>Oxford MEST-C</b> score for prognosis.</p>`},
+      {l:"Buzzwords & links", html:`<p><b>Most common primary GN worldwide.</b> East Asian &gt; European prevalence. Galactose-deficient IgA1 → "four-hit" model. Renal-limited form of <b>IgA vasculitis (HSP)</b>. Secondary IgA with cirrhosis, coeliac, HIV.</p>`},
+      {l:"Management (KDIGO 2025 · AU)", html:`<p><b>Pillar 1 — optimise the CKD bundle for ≥90 days:</b> max-tolerated ACEi/ARB, add an SGLT2 inhibitor, BP target, lifestyle. Target proteinuria <b>&lt;0.5 g/day (ideally &lt;0.3)</b>.</p><p><b>Pillar 2 — if proteinuria stays ≥0.75–1 g/day at high risk:</b> targeted-release budesonide (Nefecon 16 mg/day, 9 months) or a reduced-dose systemic steroid course; consider <b>sparsentan</b> (TGA-designated in AU for proteinuria ≥1 g/day — check current PBS status). <b>Rituximab is NOT recommended.</b></p><p>Rapidly progressive / crescentic IgAN → treat as per ANCA vasculitis (cyclophosphamide + steroids).</p>`}
+    ],
+    pearl:"Do not reach for immunosuppression before the supportive bundle has been maximised and given time — the 2025 guideline sharpened this. Steroids in IgAN carry real infection risk (TESTING/STOP-IgAN). Sparsentan and SGLT2i now sit in the supportive pillar, not the immune one."},
+  {id:"mcd", cat:"nephrotic", dx:"Minimal Change Disease",
+    stem:"A child with sudden florid oedema, or an adult after starting an NSAID / with lymphoma. Nephrotic and abrupt.",
+    fields:[
+      {l:"Presentation", html:`<p>Abrupt, full nephrotic syndrome (days–weeks): heavy proteinuria, oedema, sometimes to anasarca. <b>Selective</b> proteinuria (albumin lost, larger proteins retained). Preserved GFR usually. Most common nephrotic syndrome in <b>children</b>.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Urine</span> heavy albuminuria, bland sediment.</p><p><span class="sub">Bloods</span> hypoalbuminaemia, hyperlipidaemia, normal complement.</p><p><span class="sub">Biopsy</span> (often deferred in children) LM: <b>normal glomeruli</b>. IF: negative. <b>EM: diffuse podocyte foot-process effacement</b> — the only visible lesion.</p>`},
+      {l:"Buzzwords & links", html:`<p>"Nil disease". T-cell/cytokine podocyte injury. Secondary triggers: <b>NSAIDs</b>, <b>Hodgkin lymphoma</b>, recent infection/immunisation. In children under ~10 with typical features, treat empirically without biopsy.</p>`},
+      {l:"Management (KDIGO · AU)", html:`<p><b>Prednisolone</b> ~1 mg/kg/day (max 60–80 mg) or 2 mg/kg alternate-day, then taper. Excellent, usually rapid response (faster in children).</p><p>Frequently relapsing / steroid-dependent → steroid-sparing: cyclophosphamide, <b>calcineurin inhibitor</b> (tacrolimus/ciclosporin), or rituximab. Supportive: diuretics, salt restriction, VTE awareness.</p>`}
+    ],
+    pearl:"Steroid-responsive but relapse-prone — the management problem is relapse, not induction. In an adult, biopsy is mandatory (can't assume MCD), and always ask what drug they started or whether there's an occult lymphoma."},
+  {id:"fsgs", cat:"nephrotic", dx:"Focal Segmental Glomerulosclerosis",
+    stem:"Nephrotic syndrome, often African ancestry, or a secondary adaptive picture in obesity / reflux / single kidney.",
+    fields:[
+      {l:"Presentation", html:`<p>Nephrotic syndrome (often with hypertension and some renal impairment) in <b>primary</b> disease; <b>secondary/adaptive</b> forms present with subnephrotic proteinuria and slower course. Commonest cause of nephrotic syndrome in adults of African ancestry.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Urine</span> proteinuria (nephrotic in primary; sub-nephrotic in adaptive), variable haematuria.</p><p><span class="sub">Biopsy</span> LM: <b>focal</b> (some glomeruli), <b>segmental</b> (part of the tuft) sclerosis/hyalinosis — sampling-dependent. IF: nonspecific IgM/C3 in sclerotic segments. <b>EM: diffuse foot-process effacement in primary; segmental in secondary</b> — this split guides treatment.</p>`},
+      {l:"Buzzwords & links", html:`<p><b>APOL1</b> risk variants (African ancestry). Secondary causes: HIV (<b>collapsing</b> variant), heroin, obesity, reflux nephropathy, reduced nephron mass, pamidronate/anabolic steroids. Genetic (podocyte gene) forms in children/familial.</p>`},
+      {l:"Management (KDIGO · AU)", html:`<p><b>Primary (diffuse effacement, nephrotic):</b> high-dose prednisolone; CNI or rituximab if steroid-resistant/dependent. </p><p><b>Secondary/adaptive:</b> do NOT immunosuppress — RAS blockade, SGLT2 inhibitor, weight/BP management, treat the driver. Sparsentan is under FDA review for FSGS.</p>`}
+    ],
+    pearl:"The primary-vs-secondary distinction is the whole exam. Immunosuppressing an adaptive FSGS (obesity, single kidney) is a classic error — segmental foot-process effacement and subnephrotic protein point away from primary disease."},
+  {id:"membranous", cat:"nephrotic", dx:"Membranous Nephropathy",
+    stem:"An older adult with insidious nephrotic syndrome. Think anti-PLA2R — and think about what else might be driving it.",
+    fields:[
+      {l:"Presentation", html:`<p>Insidious nephrotic syndrome over months in a middle-aged/older adult, often with preserved GFR at diagnosis. High <b>thromboembolic</b> risk (renal vein thrombosis). Commonest primary nephrotic syndrome in older adults of European ancestry.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Serology</span> <b>anti-PLA2R antibody</b> positive in ~70–80% of primary disease (also used to monitor); anti-THSD7A in a few percent.</p><p><span class="sub">Biopsy</span> LM: diffuse GBM thickening, <b>"spikes"</b> on silver stain. IF: <b>granular</b> IgG + C3 along the capillary wall. EM: <b>subepithelial deposits</b> with "spike and dome"; foot-process effacement.</p><p><span class="sub">Screen for secondary cause</span> malignancy (esp. age >65), hep B, SLE (class V), drugs (NSAIDs, gold, penicillamine).</p>`},
+      {l:"Buzzwords & links", html:`<p>"Spike and dome", subepithelial deposits, anti-PLA2R. IgG4-predominant in primary. Membranous in SLE = <b>ISN/RPS class V</b>.</p>`},
+      {l:"Management (KDIGO · AU)", html:`<p>Risk-stratify by proteinuria, GFR trajectory and anti-PLA2R titre. <b>Low risk:</b> supportive RAS blockade ± anticoagulation, observe up to 6 months (spontaneous remission occurs). <b>Moderate/high risk:</b> <b>rituximab</b> (MENTOR), or cyclophosphamide + steroid (modified Ponticelli, alternating monthly ×6), or a CNI. Treat secondary causes at source.</p>`}
+    ],
+    pearl:"Anti-PLA2R lets you sometimes diagnose and monitor without re-biopsy, and a falling titre predicts remission. In anyone over ~65, membranous is a malignancy screen until proven otherwise."},
+  {id:"lupus", cat:"mixed", dx:"Lupus Nephritis",
+    stem:"A young woman with a rising anti-dsDNA and falling complement. The class drives everything.",
+    fields:[
+      {l:"Presentation", html:`<p>Spectrum from asymptomatic haematuria/proteinuria to full nephrotic or nephritic/RPGN, depending on <b>ISN/RPS class (I–VI)</b>. Young women, often with extrarenal SLE.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Bloods</span> ANA, <b>anti-dsDNA</b> (tracks activity), <b>low C3 and C4</b>, anti-Sm; APS antibodies.</p><p><span class="sub">Biopsy (essential to class)</span> proliferative <b>class III/IV</b> = focal/diffuse endocapillary proliferation, <b>wire-loop</b> lesions, subendothelial deposits. Class V = membranous pattern. IF: <b>"full house"</b> (IgG, IgA, IgM, C3, C1q).</p>`},
+      {l:"Buzzwords & links", html:`<p>"Full house" IF, wire-loop lesions, C1q positivity. Class VI = advanced sclerosis. Hydroxychloroquine for essentially all SLE.</p>`},
+      {l:"Management (KDIGO 2024 · AU)", html:`<p><b>Active class III/IV (± V):</b> glucocorticoids (reduced-dose taper) PLUS one of — mycophenolate (MPAA), <b>low-dose IV cyclophosphamide</b> (Euro-Lupus: 500 mg fortnightly ×6), a <b>triple regimen</b> adding belimumab, or a <b>CNI-based triple</b> (voclosporin/tacrolimus, preferred with nephrotic-range proteinuria/preserved GFR). Background hydroxychloroquine. Maintenance MPAA or azathioprine ≥3 years. Pure class V: RAS blockade + immunosuppression if nephrotic.</p>`}
+    ],
+    pearl:"You cannot manage lupus nephritis without the biopsy class — treatment for class II is nothing like class IV. The 2024 shift is toward earlier triple therapy (belimumab or a CNI added up front) and lower steroid exposure."},
+  {id:"pign", cat:"nephritic", dx:"Post-Infectious (Post-Strep) GN",
+    stem:"A child 1–3 weeks after strep throat (or 3–6 weeks after skin infection) with cola-coloured urine and a low C3.",
+    fields:[
+      {l:"Presentation", html:`<p>Nephritic syndrome — <b>cola/smoky urine</b>, oedema, hypertension, oliguria — <b>1–3 weeks after streptococcal pharyngitis</b> or 3–6 weeks after impetigo. Classically children; adult/atypical forms often staph-associated.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Urine</span> dysmorphic RBCs, RBC casts, proteinuria.</p><p><span class="sub">Bloods</span> <b>low C3, normal C4</b> (alternative pathway) — <b>C3 normalises by ~8 weeks</b>. Evidence of strep: <b>ASOT / anti-DNase B</b>.</p><p><span class="sub">Biopsy</span> (if atypical) LM: diffuse endocapillary proliferation, neutrophils. IF: <b>"starry sky"</b> granular IgG/C3. EM: subepithelial <b>"humps"</b>.</p>`},
+      {l:"Buzzwords & links", html:`<p>"Humps", "starry sky", low-then-recovering C3. Nephritogenic strains of group A strep.</p>`},
+      {l:"Management (AU)", html:`<p><b>Supportive:</b> treat any ongoing infection, salt/fluid restriction, loop diuretics, antihypertensives for volume overload. No immunosuppression in typical disease. Excellent prognosis in children.</p>`}
+    ],
+    pearl:"If C3 stays low beyond 8–12 weeks, stop calling it post-infectious — that trajectory points to C3 glomerulopathy or lupus. In an older diabetic adult, staph-associated GN can mimic this and behaves worse."},
+  {id:"c3g", cat:"mixed", dx:"C3 Glomerulopathy / MPGN pattern",
+    stem:"A tram-track MPGN pattern with a persistently low C3. The pattern is the start of the workup, not the diagnosis.",
+    fields:[
+      {l:"Presentation", html:`<p>MPGN is a <b>histological pattern</b>, not one disease — presents nephritic, nephrotic, or mixed. Reclassified by IF into <b>immune-complex-mediated</b> (Ig + complement) vs <b>complement-mediated (C3 glomerulopathy)</b> (C3 dominant, scant Ig).</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Bloods</span> <b>low C3, often normal C4</b> (alternative-pathway drive); <b>C3 nephritic factor</b>; complement genetics/function (factor H, I, MCP); in adults screen for a <b>paraprotein</b> (SPEP/free light chains).</p><p><span class="sub">Biopsy</span> LM: mesangial + endocapillary proliferation, <b>double-contour / "tram-track"</b> GBM. IF: C3-dominant (C3G) vs immune-complex. EM subtype <b>dense deposit disease</b> = intramembranous dense transformation.</p>`},
+      {l:"Buzzwords & links", html:`<p>"Tram-track", C3 nephritic factor, dense deposit disease. Immune-complex MPGN driven by <b>hep C ± cryoglobulins</b>, chronic infection, autoimmune disease, or monoclonal gammopathy.</p>`},
+      {l:"Management (AU)", html:`<p>Treat the <b>underlying driver</b> (antivirals for hep C, treat the clone in MGRS, treat autoimmune disease). Supportive CKD bundle. Immunosuppression (MMF + steroids) for progressive C3G; <b>complement inhibitors emerging</b> (iptacopan now approved for C3G in some regions — check AU availability).</p>`}
+    ],
+    pearl:"Never accept 'MPGN' as a final diagnosis — it is a prompt to hunt for hepatitis C, cryoglobulins, a paraprotein, or complement dysregulation. In an adult, missing a monoclonal gammopathy of renal significance is the trap."},
+  {id:"anca", cat:"nephritic", dx:"ANCA-Associated Vasculitis",
+    stem:"An older adult, systemically unwell, with rapidly rising creatinine and an active urine sediment. Pauci-immune RPGN.",
+    fields:[
+      {l:"Presentation", html:`<p>Rapidly progressive GN — nephritic sediment, rising creatinine over days–weeks — often with systemic features. <b>GPA</b> (sinonasal, pulmonary nodules, PR3), <b>MPA</b> (renal-limited/pulmonary, MPO), <b>EGPA</b> (asthma + eosinophilia). Pulmonary–renal syndrome.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Bloods</span> <b>ANCA</b>: PR3/c-ANCA (GPA) or MPO/p-ANCA (MPA, EGPA); <b>normal complement</b>; inflammatory markers up. Always co-test <b>anti-GBM</b> (double-positive overlap).</p><p><span class="sub">Biopsy</span> LM: focal necrotising, <b>crescentic</b> GN. <b>IF: pauci-immune (little/no staining)</b> — the defining feature.</p>`},
+      {l:"Buzzwords & links", html:`<p>"Pauci-immune", crescents, necrotising. c-ANCA/PR3 ↔ GPA; p-ANCA/MPO ↔ MPA & EGPA.</p>`},
+      {l:"Management (KDIGO 2024 · AU)", html:`<p><b>Induction:</b> glucocorticoids on the <b>reduced-dose (PEXIVAS) taper</b> PLUS <b>rituximab</b> (375 mg/m²/week ×4 or 1 g ×2) OR cyclophosphamide. <b>Avacopan</b> (oral C5a-receptor inhibitor) as a steroid-sparing option. Rituximab favoured for relapsing disease, PR3, fertility concerns, frailty. <b>Plasma exchange</b>: consider if creatinine &gt;300 µmol/L, dialysis-requiring/rapidly rising, or diffuse alveolar haemorrhage. <b>Maintenance:</b> rituximab or azathioprine. Stop immunosuppression at 3 months if still dialysis-dependent with no extrarenal disease.</p>`}
+    ],
+    pearl:"This is a nephrological emergency — treat empirically on strong suspicion, don't wait for the biopsy. Reduced-dose steroids (PEXIVAS) and avacopan have shifted the field toward minimising steroid toxicity. Always send an anti-GBM at the same time."},
+  {id:"antigbm", cat:"nephritic", dx:"Anti-GBM Disease (Goodpasture)",
+    stem:"Haemoptysis plus rapidly failing kidneys in a young man (or an older woman). Linear IF. Move fast.",
+    fields:[
+      {l:"Presentation", html:`<p><b>Pulmonary–renal syndrome</b>: haemoptysis/alveolar haemorrhage + rapidly progressive GN. Bimodal — young men (~20–30) and older women (~60–70). Pulmonary disease often precedes renal; smoking triggers alveolar haemorrhage.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Bloods</span> <b>anti-GBM antibody</b> (to the α3 chain of type IV collagen); co-test ANCA (~30% double-positive).</p><p><span class="sub">Biopsy</span> LM: diffuse crescentic GN. <b>IF: smooth LINEAR IgG along the GBM</b> — the pathognomonic pattern. EM: no discrete deposits.</p>`},
+      {l:"Buzzwords & links", html:`<p>Linear IF, α3(IV) collagen, HLA-DR15. Goodpasture = the disease with lung + kidney; anti-GBM the antibody.</p>`},
+      {l:"Management (AU)", html:`<p><b>Triple therapy, urgently:</b> <b>plasma exchange</b> (daily until anti-GBM undetectable) + <b>cyclophosphamide</b> + high-dose corticosteroids. Treat lung haemorrhage regardless of renal prognosis. Renal recovery unlikely if dialysis-dependent or ~100% crescents at presentation — but still plasma-exchange for pulmonary disease.</p>`}
+    ],
+    pearl:"Time is nephrons. Dialysis-dependence or oligoanuria at presentation usually means the kidney won't recover — but you still treat aggressively for the lungs. The overlap with ANCA (double-positive) changes relapse risk, so always test both."},
+  {id:"diabetic", cat:"nephrotic", dx:"Diabetic Nephropathy",
+    stem:"Long-standing diabetes, gradual albuminuria, and — importantly — retinopathy. The commonest cause of ESKD.",
+    fields:[
+      {l:"Presentation", html:`<p>Gradual course over years: <b>hyperfiltration → albuminuria (micro→macro) → declining GFR</b>. Usually accompanied by diabetic <b>retinopathy</b> (especially in type 1). Leading cause of end-stage kidney disease.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Urine</span> <b>albuminuria</b>: A2 (UACR 3–30 mg/mmol) to A3 (&gt;30 mg/mmol); can reach nephrotic range.</p><p><span class="sub">Biopsy</span> (only if atypical) GBM thickening, mesangial expansion, <b>Kimmelstiel–Wilson nodules</b>, hyaline arteriolosclerosis.</p><p><span class="sub">Red flags for a non-diabetic cause</span> absent retinopathy, active sediment, rapid GFR loss, or nephrotic onset without a diabetic timeline → biopsy.</p>`},
+      {l:"Buzzwords & links", html:`<p>Kimmelstiel–Wilson nodules, nodular glomerulosclerosis, hyperfiltration then decline.</p>`},
+      {l:"Management — four pillars (AU)", html:`<p><b>1. RAS blockade</b> — max-tolerated ACEi/ARB (cornerstone). <b>2. SGLT2 inhibitor</b> (dapagliflozin/empagliflozin; PBS-listed for CKD). <b>3. Finerenone</b> — non-steroidal MRA; PBS-listed since Jul 2023 for CKD + T2DM, <b>UACR ≥22.6 mg/mmol, eGFR ≥25, K⁺ ≤5.0</b>, on a RAS blocker + SGLT2i; watch hyperkalaemia; not with steroidal MRAs. <b>4. GLP-1 RA</b> (semaglutide; TGA-approved to slow kidney decline, no PBS CKD-specific listing yet). Plus BP, glycaemic and lipid control.</p>`}
+    ],
+    pearl:"Diabetic nephropathy without retinopathy should make you doubt the diagnosis and consider biopsy. The four-pillar approach is current bread-and-butter — know the finerenone PBS criteria (eGFR ≥25, UACR ≥22.6, K⁺ ≤5.0, on RAS + SGLT2i) cold, because that's exactly the number they'll ask for."},
+  {id:"rpgn", cat:"nephritic", dx:"RPGN / Crescentic GN — the synthesis",
+    stem:"Not one disease — a syndrome. Creatinine climbing over weeks + crescents on biopsy. Immunofluorescence sorts it into three.",
+    fields:[
+      {l:"Presentation", html:`<p>Nephritic syndrome with a <b>≥50% fall in GFR over days–weeks</b>; biopsy shows crescents (proliferating parietal epithelium, macrophages, fibrin in Bowman space). A nephrological emergency.</p>`},
+      {l:"The three IF patterns", html:`<p><b>Type I — Linear (anti-GBM):</b> antibody to α3(IV) collagen. Goodpasture.</p><p><b>Type II — Granular (immune-complex):</b> post-infectious, lupus, IgA/HSP, cryoglobulinaemic, MPGN.</p><p><b>Type III — Pauci-immune:</b> ANCA-associated (GPA/MPA/EGPA). Most common in adults.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">The RPGN screen</span> ANCA, anti-GBM, ANA/anti-dsDNA, C3/C4, ASOT/anti-DNase B, hep B/C, cryoglobulins, blood cultures, SPEP/free light chains — sent together, urgently.</p><p><span class="sub">Biopsy</span> urgent; LM crescents + the IF pattern name the cause.</p>`},
+      {l:"Management (AU)", html:`<p>Cause-specific but shares a spine: <b>pulse methylprednisolone then oral steroids</b>, plus cyclophosphamide or rituximab; <b>plasma exchange</b> for anti-GBM and for severe ANCA disease (creatinine >300 µmol/L or alveolar haemorrhage). Dialysis/transplant if irreversible.</p>`}
+    ],
+    pearl:"When creatinine is climbing week-on-week, treat first and biopsy fast — waiting costs nephrons. The single most useful early test is the combined immunology screen (ANCA + anti-GBM + complement + dsDNA), because it triages all three IF patterns before the biopsy returns."}
+];
+
+const VIGNETTES = [
+  {id:"vg1", cat:"nephritic",
+    stem:"A 24-year-old man presents with a single episode of visible, tea-coloured haematuria that began the same day as a sore throat. He recalls two similar episodes over the past year, each coinciding with a cold. BP 128/78, creatinine normal, urine 1+ protein with dysmorphic red cells.",
+    q:"What is your leading diagnosis, and which single blood test best separates it from the main alternative?",
+    fields:[
+      {l:"Most likely", html:`<p><b>IgA nephropathy.</b> The key phrase is <b>synpharyngitic</b> — visible haematuria concurrent with the infection, no latent period — plus recurrent episodes in a young adult with an otherwise bland picture.</p>`},
+      {l:"Differential", html:`<p><b>Post-infectious GN</b> (but that follows infection by 1–3 weeks, with a clear latent period and low C3). <b>Thin basement membrane / Alport</b> (persistent microscopic haematuria, family history, hearing/eye signs). Urological causes are unlikely with dysmorphic RBCs.</p>`},
+      {l:"Next investigation", html:`<p><b>Complement (C3/C4)</b> does most of the discriminating: <b>normal in IgAN, low C3 in post-strep.</b> Add ASOT / anti-DNase B if PIGN is plausible. Kidney biopsy (mesangial IgA) if proteinuria or impaired function.</p>`}
+    ],
+    pearl:"The examiner is testing timing + complement: concurrent haematuria with normal C3 = IgAN; haematuria 1–3 weeks later with low C3 = post-strep. Name both and the discriminator."},
+  {id:"vg2", cat:"nephritic",
+    stem:"A 7-year-old boy develops facial puffiness, dark urine and a headache. Four weeks ago he was treated for school-sores (impetigo). His BP is elevated for age, there is periorbital oedema, and urine shows blood and protein with red cell casts.",
+    q:"What is the most likely diagnosis, what will the complement show, and when would you biopsy?",
+    fields:[
+      {l:"Most likely", html:`<p><b>Post-infectious (post-streptococcal) GN</b> following impetigo — nephritic syndrome after the expected 3–6 week skin latent period.</p>`},
+      {l:"Complement", html:`<p><b>Low C3 with a normal C4</b> (alternative-pathway activation), expected to <b>normalise by ~8 weeks.</b> Supporting evidence: <b>anti-DNase B</b> (skin source) more than ASOT.</p>`},
+      {l:"Investigations & biopsy threshold", html:`<p>C3/C4, streptococcal serology, UEC, urine microscopy. <b>Biopsy only if atypical:</b> C3 still low beyond 8–12 weeks, rising creatinine / RPGN, nephrotic-range proteinuria, or no antecedent infection.</p>`},
+      {l:"Management", html:`<p>Supportive — BP and fluid control, loop diuretic. Excellent prognosis in children.</p>`}
+    ],
+    pearl:"Persistent hypocomplementaemia beyond 8–12 weeks means it isn't simple post-infectious GN — pivot to C3 glomerulopathy or lupus."},
+  {id:"vg3", cat:"nephrotic",
+    stem:"A 68-year-old man has three weeks of worsening leg swelling and now pleuritic chest pain; CTPA shows a segmental pulmonary embolism. Albumin 24 g/L, urine PCR 620 mg/mmol, bland sediment, eGFR 70.",
+    q:"What is the most likely renal diagnosis, and what are your next two investigations?",
+    fields:[
+      {l:"Most likely", html:`<p><b>Membranous nephropathy.</b> Nephrotic syndrome plus a thromboembolic event in an older adult is the classic pairing — nephrotic syndrome is markedly prothrombotic and membranous carries the highest VTE risk.</p>`},
+      {l:"Next investigations", html:`<p>(1) <b>Serum anti-PLA2R antibody</b> — supports primary disease and can guide monitoring. (2) <b>Secondary-cause screen</b>: age-appropriate malignancy work-up, hepatitis B/C, SLE serology. Kidney biopsy to confirm/grade if anti-PLA2R negative or diagnosis unclear.</p>`},
+      {l:"Management pointer", html:`<p>Anticoagulate, RAS blockade, risk-stratify; rituximab or modified Ponticelli if moderate/high risk.</p>`}
+    ],
+    pearl:"Over ~65 with membranous, treat it as a malignancy screen until proven otherwise. With a very low albumin the VTE risk is high enough that prophylactic anticoagulation is often considered."},
+  {id:"vg4", cat:"nephrotic",
+    stem:"A 30-year-old woman develops gross oedema over ten days. She started ibuprofen for back pain a fortnight earlier. UPCR is very high, albumin 18 g/L, eGFR normal, sediment bland.",
+    q:"What is your leading diagnosis, and would you biopsy?",
+    fields:[
+      {l:"Most likely", html:`<p><b>Minimal change disease.</b> Abrupt, heavy, selective nephrotic syndrome with preserved GFR; <b>NSAIDs</b> are a recognised trigger.</p>`},
+      {l:"Differential", html:`<p>FSGS and membranous (other adult nephrotic causes); NSAID-induced acute interstitial nephritis (can co-exist with MCD).</p>`},
+      {l:"Biopsy?", html:`<p><b>Yes.</b> In an adult you cannot assume MCD — biopsy confirms (normal LM, foot-process effacement on EM, negative IF) and excludes FSGS/membranous.</p>`},
+      {l:"Management", html:`<p>Stop the NSAID; prednisolone ~1 mg/kg/day; expect response, anticipate relapse.</p>`}
+    ],
+    pearl:"Children with a typical picture are treated empirically without biopsy; adults are always biopsied — and always ask what drug they just started."},
+  {id:"vg5", cat:"nephrotic",
+    stem:"A 45-year-old man of African heritage, BMI 41, has proteinuria found incidentally: UPCR 180 mg/mmol, albumin 34 g/L, eGFR 65, BP 150/95, no oedema.",
+    q:"What is the likely diagnosis, and what single biopsy feature decides whether you immunosuppress?",
+    fields:[
+      {l:"Most likely", html:`<p><b>FSGS</b> — APOL1-associated risk with obesity as an adaptive driver. The <b>subnephrotic</b> protein and preserved albumin point toward a <b>secondary/adaptive</b> rather than florid primary process.</p>`},
+      {l:"The deciding feature", html:`<p><b>Extent of podocyte foot-process effacement on EM.</b> Diffuse effacement + nephrotic syndrome → primary (immunosuppress). <b>Segmental</b> effacement + subnephrotic protein → adaptive/secondary (do NOT immunosuppress).</p>`},
+      {l:"Management (if adaptive)", html:`<p>RAS blockade, SGLT2 inhibitor, weight loss, BP control. Steroids here would be harm, not help.</p>`}
+    ],
+    pearl:"Subnephrotic protein with a normal albumin and no oedema in an obese patient is adaptive FSGS until proven otherwise. Immunosuppressing it is the classic error."},
+  {id:"vg6", cat:"nephritic",
+    stem:"A 62-year-old woman has two weeks of malaise, haemoptysis and breathlessness. Creatinine has risen from 90 to 340 µmol/L. Urine shows blood, protein and red cell casts. Chest film shows patchy alveolar shadowing.",
+    q:"Give your differential, the immediate investigations, and what you would do before the biopsy returns.",
+    fields:[
+      {l:"Framing", html:`<p><b>Pulmonary–renal syndrome with RPGN</b> — a nephrological emergency.</p>`},
+      {l:"Differential", html:`<p><b>ANCA-associated vasculitis</b> (most common) and <b>anti-GBM (Goodpasture)</b> are the two headliners, and they can co-exist (double-positive). Also severe lupus and cryoglobulinaemia.</p>`},
+      {l:"Immediate investigations", html:`<p>Send <b>ANCA (PR3/MPO) AND anti-GBM together</b>, plus ANA/dsDNA, C3/C4, hepatitis serology, blood cultures; <b>urgent kidney biopsy</b>; assess alveolar haemorrhage and monitor gas exchange.</p>`},
+      {l:"Before biopsy returns", html:`<p>On strong suspicion, start <b>pulse methylprednisolone</b>; escalate to nephrology; <b>plasma exchange</b> if anti-GBM suspected, creatinine &gt;300, or alveolar haemorrhage; supportive/airway care.</p>`}
+    ],
+    pearl:"Treat empirically — waiting for histology costs nephrons and lung. In any pulmonary–renal syndrome, send ANCA and anti-GBM in the same moment."},
+  {id:"vg7", cat:"nephritic",
+    stem:"You are called about a 55-year-old man whose creatinine has climbed from 110 to 480 µmol/L over 12 days. Urine is active with dysmorphic red cells, red cell casts and protein. He is oligoanuric.",
+    q:"How do you frame this syndrome, and what investigations will you send to sort it out?",
+    fields:[
+      {l:"Framing", html:`<p><b>Rapidly progressive glomerulonephritis</b> (≥50% GFR fall over days–weeks); biopsy will show crescents. Emergency.</p>`},
+      {l:"The three patterns to separate", html:`<p><b>Linear</b> (anti-GBM), <b>granular</b> (immune-complex: post-infectious, lupus, IgA, cryo, MPGN), <b>pauci-immune</b> (ANCA).</p>`},
+      {l:"The RPGN screen (as a bundle)", html:`<p>ANCA, anti-GBM, ANA/anti-dsDNA, C3/C4, ASOT/anti-DNase B, hep B/C, cryoglobulins, blood cultures, SPEP/serum free light chains; <b>urgent biopsy</b>; renal tract ultrasound to exclude obstruction.</p>`},
+      {l:"Management spine", html:`<p>Pulse methylprednisolone then oral steroids + cyclophosphamide or rituximab; plasma exchange for anti-GBM/severe ANCA; RRT if needed.</p>`}
+    ],
+    pearl:"The combined immunology screen triages all three patterns before histology returns — examiners want to hear you send it as one bundle, urgently."},
+  {id:"vg8", cat:"mixed",
+    stem:"A 26-year-old woman has a photosensitive rash, arthralgia and new ankle oedema. Urine shows blood and protein (PCR 340 mg/mmol). C3 and C4 are both low; anti-dsDNA is strongly positive.",
+    q:"What is the diagnosis, and why is the kidney biopsy non-negotiable here?",
+    fields:[
+      {l:"Diagnosis", html:`<p><b>Lupus nephritis</b> (can be nephritic and/or nephrotic).</p>`},
+      {l:"Why biopsy is essential", html:`<p>Management is entirely <b>class-dependent (ISN/RPS I–VI)</b>. Class II needs little or no immunosuppression; proliferative <b>class III/IV</b> needs full induction; <b>class V</b> (membranous) is different again. The biopsy also grades <b>activity vs chronicity</b>. You cannot choose therapy without it.</p>`},
+      {l:"Next Ix / Mx", html:`<p>Full lupus serology (ENA, APS antibodies, complement), quantify protein, biopsy. If proliferative: glucocorticoids (reduced-dose taper) + MPAA or low-dose IV cyclophosphamide, increasingly with belimumab or a CNI as triple therapy; hydroxychloroquine for all.</p>`}
+    ],
+    pearl:"Low C3 AND C4 with a high dsDNA is textbook lupus — but the biopsy class, not the serology, decides the drug."},
+  {id:"vg9", cat:"nephrotic",
+    stem:"A 58-year-old man with 16 years of type 2 diabetes has a UACR that has risen over years to 80 mg/mmol, with eGFR now 48. He has background diabetic retinopathy. Sediment is bland.",
+    q:"Is this diabetic nephropathy? What would make you biopsy, and what is your management framework?",
+    fields:[
+      {l:"Is it diabetic nephropathy?", html:`<p><b>Yes, most likely.</b> Long duration, gradual albuminuria, concurrent <b>retinopathy</b>, and a bland sediment are the typical package.</p>`},
+      {l:"What would make you biopsy", html:`<p>Features suggesting a <b>non-diabetic</b> cause: <b>absent retinopathy</b>, active sediment (dysmorphic RBCs/casts), rapid GFR decline, abrupt nephrotic-range proteinuria, or short diabetes duration.</p>`},
+      {l:"Management — four pillars", html:`<p>Max-tolerated <b>RAS blockade</b>; <b>SGLT2 inhibitor</b>; <b>finerenone</b> (if UACR ≥22.6 mg/mmol, eGFR ≥25, K⁺ ≤5.0, on RAS + SGLT2i); <b>GLP-1 RA</b> (e.g. semaglutide); plus BP, glycaemic and lipid control.</p>`}
+    ],
+    pearl:"Retinopathy is your friend — its presence supports diabetic nephropathy, its absence should push you toward biopsy. Know the finerenone eligibility numbers precisely."},
+  {id:"vg10", cat:"mixed",
+    stem:"A 60-year-old man has haematuria, proteinuria (PCR 300 mg/mmol) and mildly impaired function. Biopsy shows a membranoproliferative pattern with double contours; immunofluorescence is C3-dominant with scant immunoglobulin. C3 is low, C4 normal.",
+    q:"How do you complete the workup?",
+    fields:[
+      {l:"Interpretation", html:`<p><b>C3 glomerulopathy</b> — a complement-mediated MPGN pattern driven by <b>alternative-pathway dysregulation</b> (low C3, normal C4).</p>`},
+      {l:"Complete the workup", html:`<p><b>Complement studies</b>: C3 nephritic factor, factors H and I, MCP; genetic testing. Crucially in an adult, <b>screen for a paraprotein</b> (SPEP, serum free light chains, immunofixation) — a monoclonal gammopathy can drive this (MGRS). Also hep C ± cryoglobulins and autoimmune screen for the immune-complex differential.</p>`},
+      {l:"Management pointer", html:`<p>Treat any underlying driver (clone, infection, autoimmune disease); supportive CKD bundle; MMF + steroids if progressive; emerging complement inhibitors (iptacopan).</p>`}
+    ],
+    pearl:"An MPGN pattern is a prompt, not a diagnosis. In an adult the miss that hurts is a monoclonal gammopathy of renal significance — always send the paraprotein screen."},
+  {id:"vg11", cat:"nephritic",
+    stem:"A 4-year-old presents with a week of bloody diarrhoea, now lethargic and passing little urine. Bloods: Hb 78 g/L, platelets 45, creatinine markedly raised, LDH high; blood film shows schistocytes.",
+    q:"What is the diagnosis, what one test separates the key differential, and how do you manage it?",
+    fields:[
+      {l:"Diagnosis", html:`<p><b>Typical (D+) haemolytic uraemic syndrome</b> — the triad of <b>microangiopathic haemolytic anaemia, thrombocytopenia and AKI</b> after bloody diarrhoea (Shiga-toxin <i>E. coli</i>, O157:H7).</p>`},
+      {l:"The discriminating test", html:`<p><b>ADAMTS13 activity</b>: severely reduced (&lt;10%) in <b>TTP</b>, normal/near-normal in HUS. (TTP skews adult, neurological, no diarrhoea.)</p>`},
+      {l:"Management", html:`<p>Mainly <b>supportive</b> — fluids/electrolytes, RRT if needed, transfusion as required. <b>Avoid antibiotics and anti-motility agents</b> in typical HUS (may increase toxin release). Atypical (complement-mediated) HUS → eculizumab + complement workup.</p>`}
+    ],
+    pearl:"Bloody diarrhoea + MAHA + AKI in a child = typical HUS; don't give antibiotics. A normal ADAMTS13 rules out TTP."},
+  {id:"vg12", cat:"mixed",
+    stem:"A 71-year-old man has AKI (creatinine 320 µmol/L, normal three months ago) with fatigue, back pain and constipation. Urine dipstick shows only trace blood and no protein, yet the lab reports heavy proteinuria on the same sample. Calcium is high, Hb 92 g/L.",
+    q:"What is your differential, and what would you send?",
+    fields:[
+      {l:"The clue", html:`<p><b>Dipstick-negative but lab-positive proteinuria</b> = non-albumin protein (free light chains), which the dipstick misses. With hypercalcaemia, anaemia, bone pain and AKI, <b>think myeloma.</b></p>`},
+      {l:"Differential", html:`<p>Cast nephropathy (myeloma kidney), light-chain-related disease (AL amyloid, MGRS), hypercalcaemia-related AKI. <b>This is not a primary glomerulonephritis.</b></p>`},
+      {l:"Next investigations", html:`<p><b>Serum free light chains</b> + SPEP/immunofixation, urine Bence-Jones/UPEP, calcium/PTH, skeletal survey or whole-body imaging, blood film; kidney biopsy if unclear. Urgent haematology involvement.</p>`}
+    ],
+    pearl:"A dipstick-protein / lab-protein mismatch is the myeloma tell — the dipstick only sees albumin. In an older patient with AKI, always ask: could this be a paraprotein?"},
+  {id:"vg13", cat:"mixed",
+    stem:"A 55-year-old woman has palpable purpura on her lower legs, arthralgia and a peripheral neuropathy. Bloods show a low C4 with a relatively preserved C3. She has haematuria, proteinuria and impaired renal function, and a history of injecting drug use.",
+    q:"What is your unifying diagnosis, and what confirms it?",
+    fields:[
+      {l:"Most likely", html:`<p><b>Cryoglobulinaemic vasculitis with a membranoproliferative GN</b>, usually driven by <b>hepatitis C</b>. Palpable purpura, arthralgia and neuropathy with a disproportionately <b>low C4</b> is the classic fingerprint.</p>`},
+      {l:"Confirm", html:`<p>Serum <b>cryoglobulins</b> (warm transport), <b>hepatitis C</b> serology and RNA, rheumatoid factor (often positive), complement (low C4 out of proportion to C3), and kidney biopsy (MPGN pattern, intraluminal "hyaline thrombi").</p>`},
+      {l:"Management", html:`<p>Treat hepatitis C with direct-acting antivirals; rituximab with or without steroids for significant vasculitis; plasma exchange for organ- or life-threatening disease.</p>`}
+    ],
+    pearl:"A low C4 out of proportion to C3, with purpura, arthralgia and neuropathy, is cryoglobulinaemia. Hepatitis C is the driver until proven otherwise."},
+  {id:"vg14", cat:"nephritic",
+    stem:"A 19-year-old man is referred with persistent microscopic haematuria and mild proteinuria. His maternal uncle is on dialysis and wears hearing aids. Examination notes high-frequency hearing loss.",
+    q:"What is the likely diagnosis, and how would you investigate?",
+    fields:[
+      {l:"Most likely", html:`<p><b>Alport syndrome</b> (type IV collagen defect): haematuria, progressive renal failure and sensorineural deafness, commonly X-linked (maternal-line males affected).</p>`},
+      {l:"Differential", html:`<p><b>Thin basement membrane nephropathy</b> (benign familial haematuria) if isolated haematuria without progression or deafness; IgA nephropathy.</p>`},
+      {l:"Investigations", html:`<p>Pedigree/family history, <b>audiometry</b>, ophthalmology (lenticonus, retinopathy), protein quantification, <b>genetic testing (COL4A3/4/5)</b>. Biopsy EM: <b>basket-weave lamellation</b> of the GBM in Alport, uniformly thin GBM in TBMN.</p>`},
+      {l:"Management", html:`<p>RAS blockade to slow progression, monitoring, genetic counselling; transplant if ESKD (rare post-transplant anti-GBM disease in Alport).</p>`}
+    ],
+    pearl:"Haematuria plus deafness plus a family history of dialysis is Alport until proven otherwise. Audiometry and a pedigree cost nothing; EM basket-weaving is the tell."},
+  {id:"vg15", cat:"mixed",
+    stem:"A 48-year-old woman with recently diagnosed diffuse systemic sclerosis presents with headache, visual disturbance and BP 220/130. Creatinine has jumped from 80 to 260 over a few days. Blood film shows fragments and platelets are low. She was started on prednisolone last month for arthralgia.",
+    q:"What is the diagnosis, and what is the single most important treatment?",
+    fields:[
+      {l:"Diagnosis", html:`<p><b>Scleroderma renal crisis</b> — abrupt malignant hypertension, AKI and microangiopathic haemolysis in early diffuse systemic sclerosis. Recent <b>corticosteroids</b> are a recognised precipitant.</p>`},
+      {l:"The key treatment", html:`<p>An <b>ACE inhibitor</b> (captopril), titrated aggressively to control BP. It is the treatment <b>even as the creatinine rises</b> and improves outcomes. Not steroids.</p>`},
+      {l:"Investigations / management", html:`<p>BP, UEC, haemolysis screen, urinalysis (often bland), exclude other causes of TMA. Dialysis if needed (some recover and come off). Avoid high-dose steroids.</p>`}
+    ],
+    pearl:"The trap is reaching for steroids or holding the ACE inhibitor because the creatinine is climbing. In scleroderma renal crisis the ACE inhibitor is the treatment, and steroids can trigger it."},
+  {id:"vg16", cat:"nephrotic",
+    stem:"A 67-year-old man has nephrotic-range proteinuria, an enlarged tongue and easy bruising. Echocardiogram shows a thick-walled heart with a sparkling myocardium. Serum testing reveals a monoclonal light chain.",
+    q:"What is your leading diagnosis, and how do you confirm it?",
+    fields:[
+      {l:"Most likely", html:`<p><b>AL (light-chain) amyloidosis</b> — nephrotic syndrome with multi-organ involvement (macroglossia, periorbital purpura, infiltrative cardiomyopathy) and a monoclonal light chain.</p>`},
+      {l:"Confirm", html:`<p>Tissue biopsy (kidney, or less invasive fat pad / bone marrow) with <b>Congo red showing apple-green birefringence</b> under polarised light; <b>type</b> the amyloid (mass spectrometry: AL vs AA); serum/urine free light chains, SPEP/immunofixation, bone marrow.</p>`},
+      {l:"Management", html:`<p>Treat the plasma cell clone (haematology; bortezomib-based); supportive nephrotic care; cardiac involvement drives prognosis.</p>`}
+    ],
+    pearl:"Macroglossia and periorbital purpura with nephrotic syndrome is amyloid until proven otherwise. Congo red apple-green birefringence confirms it, then type it, because AL and AA are treated differently."},
+  {id:"vg17", cat:"mixed",
+    stem:"A 62-year-old man develops AKI (creatinine 90 to 250) two weeks after starting a proton pump inhibitor and a course of antibiotics. He has a low-grade fever and a faint rash. Urine shows sterile pyuria and white cell casts, modest proteinuria, and no dysmorphic red cells.",
+    q:"What is the most likely cause, and how does the urine steer you away from a glomerulonephritis?",
+    fields:[
+      {l:"Most likely", html:`<p><b>Acute (allergic) tubulointerstitial nephritis</b>, drug-induced — proton pump inhibitors and antibiotics are classic culprits. Fever and rash with the timing fit.</p>`},
+      {l:"Why not a GN", html:`<p>The sediment shows <b>sterile pyuria and white cell casts</b> with modest proteinuria and <b>no dysmorphic red cells or red cell casts</b>. That tubulointerstitial pattern points away from glomerular disease.</p>`},
+      {l:"Investigations / management", html:`<p>Medication timeline, urine microscopy, FBC (eosinophilia). <b>Stop the culprit drug</b>; corticosteroids if no recovery after withdrawal; biopsy if unclear (interstitial inflammation, eosinophils).</p>`}
+    ],
+    pearl:"White cell casts and sterile pyuria with a bland glomerular picture plus a new drug is interstitial nephritis, not GN. The whole answer is the drug history and the sediment."},
+  {id:"vg18", cat:"nephrotic",
+    stem:"A 34-year-old man of African heritage presents with heavy proteinuria and a creatinine rising rapidly over weeks. He is newly diagnosed with advanced, untreated HIV. Kidneys are echogenic and enlarged on ultrasound.",
+    q:"What renal lesion do you expect, and what is the key management step?",
+    fields:[
+      {l:"Expected lesion", html:`<p><b>Collapsing FSGS (HIV-associated nephropathy)</b> — heavy proteinuria, rapid GFR loss, large echogenic kidneys, African ancestry (APOL1).</p>`},
+      {l:"Assess", html:`<p>Kidney biopsy (collapsing glomerulopathy, tubular microcysts); HIV staging.</p>`},
+      {l:"Key management", html:`<p>Start <b>antiretroviral therapy</b> — the single most important intervention — plus RAS blockade; corticosteroids sometimes used; supportive care.</p>`}
+    ],
+    pearl:"Large echogenic kidneys with collapsing FSGS in untreated HIV is HIVAN. The answer is treating the HIV (ART), not immunosuppression."},
+  {id:"vg19", cat:"nephrotic",
+    stem:"A 28-year-old woman who reached end-stage kidney disease from primary FSGS receives a deceased-donor kidney transplant. On day 3 she develops heavy proteinuria, and it is rising fast.",
+    q:"What is happening, and what would you do?",
+    fields:[
+      {l:"What is happening", html:`<p><b>Recurrent primary FSGS</b> in the allograft — a circulating permeability factor causes very early, often massive proteinuria (within days), unlike de novo disease.</p>`},
+      {l:"Investigations", html:`<p>Quantify proteinuria; allograft biopsy (early may show only foot-process effacement on EM before segmental sclerosis appears).</p>`},
+      {l:"Management", html:`<p><b>Plasma exchange</b> (removes the circulating factor) is the mainstay, often with rituximab and high-dose RAS blockade; involve the transplant team urgently.</p>`}
+    ],
+    pearl:"Massive proteinuria within days of transplant in someone whose original disease was primary FSGS is recurrence, and plasma exchange is the reflex. Secondary/adaptive FSGS does not recur this way."},
+  {id:"vg20", cat:"nephrotic",
+    stem:"A 60-year-old man with 12 years of type 2 diabetes presents with new nephrotic-range proteinuria that appeared over six weeks, plus some dysmorphic red cells on microscopy. His last retinal screen was normal. Creatinine is stable.",
+    q:"Would you attribute this to diabetic nephropathy? What would you do?",
+    fields:[
+      {l:"Is it diabetic nephropathy?", html:`<p><b>No, this does not fit.</b> The onset is too abrupt, the sediment is active (dysmorphic RBCs), and there is <b>no retinopathy</b>. These are red flags for a non-diabetic renal disease.</p>`},
+      {l:"What to do", html:`<p><b>Kidney biopsy.</b> Differential includes membranous nephropathy or another primary GN superimposed on diabetes. Screen serology (anti-PLA2R, ANA, ANCA, complement, hep B/C, paraprotein).</p>`},
+      {l:"Management", html:`<p>Directed by the biopsy; continue the diabetic CKD bundle regardless.</p>`}
+    ],
+    pearl:"Abrupt nephrotic syndrome, an active sediment, or absent retinopathy in a diabetic should trigger a biopsy, not an assumption. The examiner is testing whether you over-attribute to diabetes."}
+];
+
+const QUIZ = [
+  {id:"q1", cat:"nephritic", topic:"IgA nephropathy", q:"What is the most characteristic presentation of IgA nephropathy?", a:"Synpharyngitic visible haematuria: gross haematuria at the same time as a mucosal (URTI or GI) infection, with no latent period, in a young adult.", note:"The concurrency separates it from post-strep GN, which follows infection by 1-3 weeks."},
+  {id:"q2", cat:"nephritic", topic:"IgA nephropathy", q:"What is the defining immunofluorescence finding in IgA nephropathy?", a:"Dominant mesangial IgA deposits (often with C3, sometimes IgG)."},
+  {id:"q3", cat:"nephritic", topic:"IgA nephropathy", q:"What does serum complement show in IgA nephropathy?", a:"Normal C3 and C4.", note:"Normal complement helps separate it from post-strep GN, where C3 is low."},
+  {id:"q4", cat:"nephritic", topic:"IgA nephropathy", q:"Which histological score is used to prognosticate IgA nephropathy?", a:"The Oxford MEST-C score (mesangial and endocapillary hypercellularity, segmental sclerosis, tubular atrophy, crescents)."},
+  {id:"q5", cat:"nephritic", topic:"IgA nephropathy", q:"What is the first-line management approach per the KDIGO 2025 guideline?", a:"Maximise supportive care first (max-tolerated RAS blockade plus an SGLT2 inhibitor, BP and lifestyle) targeting proteinuria below 0.5 g/day. Add targeted-release budesonide or reduced-dose steroids only if high risk persists; rituximab is not recommended."},
+  {id:"q6", cat:"nephrotic", topic:"Minimal change disease", q:"What is the most common cause of nephrotic syndrome in children?", a:"Minimal change disease."},
+  {id:"q7", cat:"nephrotic", topic:"Minimal change disease", q:"What is the characteristic electron microscopy finding in minimal change disease?", a:"Diffuse podocyte foot-process effacement (with normal light microscopy and negative immunofluorescence)."},
+  {id:"q8", cat:"nephrotic", topic:"Minimal change disease", q:"What type of proteinuria is typical of minimal change disease?", a:"Selective proteinuria (predominantly albumin; larger proteins retained)."},
+  {id:"q9", cat:"nephrotic", topic:"Minimal change disease", q:"Name two classic secondary triggers of minimal change disease.", a:"NSAIDs and Hodgkin lymphoma."},
+  {id:"q10", cat:"nephrotic", topic:"Minimal change disease", q:"What is the first-line treatment and the expected response?", a:"Corticosteroids (prednisolone about 1 mg/kg/day). Response is usually excellent and rapid, but relapse is common."},
+  {id:"q11", cat:"nephrotic", topic:"FSGS", q:"What is the commonest cause of nephrotic syndrome in adults of African ancestry?", a:"Focal segmental glomerulosclerosis (associated with APOL1 risk variants)."},
+  {id:"q12", cat:"nephrotic", topic:"FSGS", q:"What is the light-microscopy finding in FSGS?", a:"Focal (some glomeruli) and segmental (part of the tuft) sclerosis and hyalinosis."},
+  {id:"q13", cat:"nephrotic", topic:"FSGS", q:"Which EM feature helps separate primary from secondary FSGS?", a:"Foot-process effacement: diffuse in primary (nephrotic), segmental in secondary/adaptive.", note:"This distinction decides whether to immunosuppress."},
+  {id:"q14", cat:"nephrotic", topic:"FSGS", q:"Which FSGS variant is associated with HIV?", a:"Collapsing FSGS (HIV-associated nephropathy)."},
+  {id:"q15", cat:"nephrotic", topic:"FSGS", q:"How do you manage secondary/adaptive FSGS?", a:"Supportive: RAS blockade, SGLT2 inhibitor, weight and BP control. Not immunosuppression."},
+  {id:"q16", cat:"nephrotic", topic:"Membranous nephropathy", q:"What is the key serological marker of primary membranous nephropathy?", a:"Anti-PLA2R antibody (positive in about 70-80%); also useful for monitoring."},
+  {id:"q17", cat:"nephrotic", topic:"Membranous nephropathy", q:"What is the characteristic EM finding?", a:"Subepithelial deposits with a 'spike and dome' appearance ('spikes' on silver stain)."},
+  {id:"q18", cat:"nephrotic", topic:"Membranous nephropathy", q:"Describe the immunofluorescence pattern.", a:"Granular IgG and C3 along the glomerular capillary wall."},
+  {id:"q19", cat:"nephrotic", topic:"Membranous nephropathy", q:"Which complication is membranous nephropathy particularly associated with?", a:"Thromboembolism, especially renal vein thrombosis (the highest VTE risk of the nephrotic syndromes)."},
+  {id:"q20", cat:"nephrotic", topic:"Membranous nephropathy", q:"What key secondary cause must you exclude in an older adult?", a:"Malignancy (also hepatitis B, SLE class V, and drugs such as NSAIDs, gold and penicillamine)."},
+  {id:"q21", cat:"mixed", topic:"Lupus nephritis", q:"Which antibody tracks lupus nephritis disease activity?", a:"Anti-dsDNA (with low C3 and C4)."},
+  {id:"q22", cat:"mixed", topic:"Lupus nephritis", q:"What is the characteristic immunofluorescence pattern?", a:"'Full house': IgG, IgA, IgM, C3 and C1q."},
+  {id:"q23", cat:"mixed", topic:"Lupus nephritis", q:"What light-microscopy lesion is a buzzword for proliferative (class III/IV) disease?", a:"Wire-loop lesions (thickened capillary loops from subendothelial deposits)."},
+  {id:"q24", cat:"mixed", topic:"Lupus nephritis", q:"Why is a kidney biopsy essential in lupus nephritis?", a:"Management is entirely class-dependent (ISN/RPS I-VI), and the biopsy also grades activity versus chronicity."},
+  {id:"q25", cat:"mixed", topic:"Lupus nephritis", q:"What is first-line induction for proliferative (class III/IV) LN per KDIGO 2024?", a:"Glucocorticoids (reduced-dose taper) plus MPAA or low-dose IV cyclophosphamide, increasingly as triple therapy with belimumab or a CNI (voclosporin/tacrolimus); hydroxychloroquine for all."},
+  {id:"q26", cat:"nephritic", topic:"Post-strep GN", q:"What is the complement pattern in post-streptococcal GN and how does it evolve?", a:"Low C3 with a normal C4 (alternative pathway); C3 normalises by about 8 weeks."},
+  {id:"q27", cat:"nephritic", topic:"Post-strep GN", q:"What are the latent periods after pharyngitis versus impetigo?", a:"1-3 weeks after pharyngitis; 3-6 weeks after skin infection (impetigo)."},
+  {id:"q28", cat:"nephritic", topic:"Post-strep GN", q:"What is the characteristic EM finding?", a:"Subepithelial 'humps'."},
+  {id:"q29", cat:"nephritic", topic:"Post-strep GN", q:"Describe the immunofluorescence appearance.", a:"Coarse granular IgG and C3 ('starry sky') in the capillary wall and mesangium."},
+  {id:"q30", cat:"nephritic", topic:"Post-strep GN", q:"What is the management of typical post-strep GN?", a:"Supportive: treat infection, control BP and volume (salt restriction, loop diuretics). Excellent prognosis, especially in children."},
+  {id:"q31", cat:"mixed", topic:"C3 glomerulopathy", q:"What complement pattern suggests C3 glomerulopathy?", a:"Low C3 with a normal C4 (alternative-pathway activation)."},
+  {id:"q32", cat:"mixed", topic:"C3 glomerulopathy", q:"Which autoantibody is classically found?", a:"C3 nephritic factor (stabilises the C3 convertase)."},
+  {id:"q33", cat:"mixed", topic:"MPGN pattern", q:"What is the light-microscopy buzzword for the MPGN pattern?", a:"Double contours, or 'tram-track' glomerular basement membrane (mesangial interposition)."},
+  {id:"q34", cat:"mixed", topic:"C3 glomerulopathy", q:"Which subtype shows intramembranous dense deposits on EM?", a:"Dense deposit disease."},
+  {id:"q35", cat:"mixed", topic:"MPGN pattern", q:"What is the essential workup step in an adult with an MPGN pattern?", a:"Screen for a paraprotein (SPEP, serum free light chains) and for hepatitis C / cryoglobulins.", note:"Missing a monoclonal gammopathy of renal significance (MGRS) is the trap."},
+  {id:"q36", cat:"nephritic", topic:"ANCA vasculitis", q:"What is the defining immunofluorescence finding?", a:"Pauci-immune (little or no staining), with a necrotising crescentic GN on light microscopy."},
+  {id:"q37", cat:"nephritic", topic:"ANCA vasculitis", q:"Match the ANCA to the disease.", a:"PR3/c-ANCA with granulomatosis with polyangiitis (GPA); MPO/p-ANCA with microscopic polyangiitis (MPA) and EGPA."},
+  {id:"q38", cat:"nephritic", topic:"ANCA vasculitis", q:"What must you always co-test when you suspect ANCA vasculitis?", a:"Anti-GBM antibody (double-positive overlap changes management and relapse risk)."},
+  {id:"q39", cat:"nephritic", topic:"ANCA vasculitis", q:"What are the plasma exchange indications per KDIGO 2024?", a:"Creatinine above ~300 micromol/L, dialysis-requiring or rapidly rising creatinine, or diffuse alveolar haemorrhage."},
+  {id:"q40", cat:"nephritic", topic:"ANCA vasculitis", q:"Which steroid-sparing agent was added by the KDIGO 2024 update?", a:"Avacopan, an oral C5a-receptor inhibitor."},
+  {id:"q41", cat:"nephritic", topic:"Anti-GBM disease", q:"What is the defining immunofluorescence finding?", a:"Smooth linear IgG along the glomerular basement membrane."},
+  {id:"q42", cat:"nephritic", topic:"Anti-GBM disease", q:"What is the target antigen?", a:"The alpha-3 chain of type IV collagen."},
+  {id:"q43", cat:"nephritic", topic:"Anti-GBM disease", q:"What is the treatment triad?", a:"Plasma exchange plus cyclophosphamide plus high-dose corticosteroids."},
+  {id:"q44", cat:"nephritic", topic:"Anti-GBM disease", q:"Which features predict poor renal recovery?", a:"Dialysis-dependence or near-100% crescents at presentation (still treat aggressively for pulmonary haemorrhage)."},
+  {id:"q45", cat:"nephrotic", topic:"Diabetic nephropathy", q:"What is the pathognomonic biopsy nodule?", a:"Kimmelstiel-Wilson nodules (nodular glomerulosclerosis)."},
+  {id:"q46", cat:"nephrotic", topic:"Diabetic nephropathy", q:"Which clinical finding supports the diagnosis, and whose absence should prompt a biopsy?", a:"Diabetic retinopathy."},
+  {id:"q47", cat:"nephrotic", topic:"Diabetic nephropathy", q:"Name the four pillars of therapy.", a:"RAS blockade, SGLT2 inhibitor, finerenone, and a GLP-1 receptor agonist (plus BP, glycaemic and lipid control)."},
+  {id:"q48", cat:"nephrotic", topic:"Diabetic nephropathy", q:"State the finerenone PBS eligibility numbers.", a:"eGFR at or above 25, UACR at or above 22.6 mg/mmol, potassium at or below 5.0, already on a RAS blocker plus an SGLT2 inhibitor."},
+  {id:"q49", cat:"nephritic", topic:"RPGN", q:"How is rapidly progressive GN defined?", a:"A fall in GFR of at least 50% over days to weeks, with crescents on biopsy."},
+  {id:"q50", cat:"nephritic", topic:"RPGN", q:"Name the three immunofluorescence patterns and a cause of each.", a:"Linear (anti-GBM), granular (immune-complex: post-strep, lupus, IgA, cryo), and pauci-immune (ANCA)."},
+  {id:"q51", cat:"nephritic", topic:"RPGN", q:"What is the single most useful early investigation?", a:"The combined immunology screen sent as a bundle: ANCA, anti-GBM, complement, ANA/anti-dsDNA (plus infection and paraprotein screens)."},
+  {id:"q52", cat:"mixed", topic:"Complement across GN", q:"Which glomerular diseases classically show a low C3?", a:"Post-strep GN and C3 glomerulopathy (low C3, normal C4), lupus nephritis (low C3 AND C4), and cryoglobulinaemic/immune-complex MPGN (low C4). Complement is normal in IgA, anti-GBM and ANCA."},
+  {id:"q53", cat:"nephritic", topic:"Pulmonary-renal syndrome", q:"Which conditions cause a pulmonary-renal syndrome?", a:"ANCA-associated vasculitis and anti-GBM (Goodpasture) are the two classic causes; also severe lupus and cryoglobulinaemia."}
+];
+
+const CAT_NAME = {nephritic:"Nephritic pattern", nephrotic:"Nephrotic pattern", mixed:"Mixed / variable"};
+const STORE_KEY = "gn_flashcards_issy_v2";
+
+let mode = "cards";
+let order = CARDS.map((_,i)=>i);
+let filter = "all";
+let pos = 0;
+let flipped = false;
+let status = {};
+
+function deck(){ return mode==="vignettes" ? VIGNETTES : mode==="recall" ? QUIZ : CARDS; }
+
+const store = {
+  async get(k){
+    if(typeof window!=="undefined" && window.storage && window.storage.get){
+      try{ return await window.storage.get(k); }catch(e){}
+    }
+    try{ const v=localStorage.getItem(k); return v!=null?{value:v}:null; }catch(e){ return null; }
+  },
+  async set(k,v){
+    if(typeof window!=="undefined" && window.storage && window.storage.set){
+      try{ return await window.storage.set(k,v); }catch(e){}
+    }
+    try{ localStorage.setItem(k,v); }catch(e){}
+  }
+};
+async function loadStatus(){
+  try{ const r = await store.get(STORE_KEY); if(r&&r.value){ status = JSON.parse(r.value); } }
+  catch(e){ status = {}; }
+  render();
+}
+async function saveStatus(){ try{ await store.set(STORE_KEY, JSON.stringify(status)); }catch(e){} }
+
+function activeList(){
+  const dk = deck();
+  let list = order.slice();
+  if(filter==="review") return list.filter(i=>status[dk[i].id]==="rev");
+  if(filter!=="all") return list.filter(i=>dk[i].cat===filter);
+  return list;
+}
+
+const el = id=>document.getElementById(id);
+const card = el("card");
+
+function render(){
+  const dk = deck();
+  const list = activeList();
+  el("posTot").textContent = list.length;
+  const fb = el("frontBody");
+
+  if(list.length===0){
+    el("posNow").textContent = "0";
+    el("backScroll").innerHTML = "";
+    fb.className = "body";
+    fb.innerHTML = `<div class="stem" style="font-style:normal;opacity:.75">No cards flagged for review in this deck yet. Work through it and tag the ones you want to revisit.</div>`;
+    el("tabF").className="tab"; el("tabB").className="tab";
+    el("confTag").textContent="";
+    setNav(list); return;
+  }
+  if(pos>=list.length) pos=0;
+  const c = dk[list[pos]];
+  el("posNow").textContent = pos+1;
+
+  if(mode==="vignettes"){
+    el("tabF").className = "tab neutral";
+    el("tabB").className = "tab "+c.cat;
+    fb.className = "body vg";
+    fb.innerHTML = `<div class="vg-eyebrow">Clinical vignette · ${pos+1} of ${list.length}</div>`
+      + `<div class="vg-stem">${c.stem}</div>`
+      + `<div class="vg-q"><span class="ql">Question</span><p>${c.q}</p></div>`;
+    el("flipHintF").textContent = "Answer it out loud, then tap to check";
+    let html = `<div class="dx-mini"><span class="pip ${c.cat}"></span>${CAT_NAME[c.cat]}</div>`;
+    c.fields.forEach(f=>{ html += `<div class="field"><div class="fl">${f.l}</div>${f.html}</div>`; });
+    if(c.pearl) html += `<div class="flag"><div class="fl">Examiner's angle</div><p>${c.pearl}</p></div>`;
+    el("backScroll").innerHTML = html;
+  } else if(mode==="recall"){
+    el("tabF").className = "tab neutral";
+    el("tabB").className = "tab "+c.cat;
+    fb.className = "body";
+    fb.innerHTML = `<div class="cat-label" style="color:var(--teal-deep)">${c.topic}</div>`
+      + `<div class="qz">${c.q}</div>`;
+    el("flipHintF").textContent = "Recall it, then tap to check";
+    let html = `<div class="dx-mini"><span class="pip ${c.cat}"></span>${c.topic}</div>`;
+    html += `<div class="field ans"><div class="fl">Answer</div><p>${c.a}</p></div>`;
+    if(c.note) html += `<div class="flag"><div class="fl">Why it matters</div><p>${c.note}</p></div>`;
+    el("backScroll").innerHTML = html;
+  } else {
+    el("tabF").className = "tab "+c.cat;
+    el("tabB").className = "tab "+c.cat;
+    fb.className = "body";
+    fb.innerHTML = `<div class="cat-label ${c.cat}">${CAT_NAME[c.cat]}</div>`
+      + `<div class="dx">${c.dx}</div>`
+      + `<div class="stem">${c.stem}</div>`;
+    el("flipHintF").textContent = "Tap / press space to reveal";
+    let html = `<div class="dx-mini"><span class="pip ${c.cat}"></span>${c.dx}</div>`;
+    c.fields.forEach(f=>{ html += `<div class="field"><div class="fl">${f.l}</div>${f.html}</div>`; });
+    if(c.pearl) html += `<div class="flag"><div class="fl">Don't-miss pearl</div><p>${c.pearl}</p></div>`;
+    el("backScroll").innerHTML = html;
+  }
+
+  const st = status[c.id];
+  el("confTag").innerHTML = st==="conf" ? '<span style="color:var(--teal-deep)">● confident</span>'
+                     : st==="rev" ? '<span style="color:var(--flag-ink)">● review</span>' : '';
+  el("confBtn").classList.toggle("active", st==="conf");
+  el("revBtn").classList.toggle("active", st==="rev");
+
+  flipped=false; card.classList.remove("flipped");
+  el("backScroll").scrollTop=0; fb.scrollTop=0;
+  setNav(list);
+}
+
+function setNav(list){ el("prev").disabled = list.length<=1; el("next").disabled = list.length<=1; }
+function flip(){ flipped=!flipped; card.classList.toggle("flipped",flipped); }
+function go(d){ const list=activeList(); if(!list.length) return; pos=(pos+d+list.length)%list.length; render(); }
+function shuffle(){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} pos=0; render(); }
+
+function setStatus(kind){
+  const dk=deck(); const list=activeList(); if(!list.length) return;
+  const c=dk[list[pos]];
+  status[c.id] = status[c.id]===kind ? null : kind;
+  saveStatus(); render();
+  if(status[c.id]) setTimeout(()=>go(1),180);
+}
+
+function resetFilterUI(){
+  document.querySelectorAll(".filt").forEach(x=>x.classList.remove("on"));
+  document.querySelector('.filt[data-filt="all"]').classList.add("on");
+  filter="all";
+}
+
+card.addEventListener("click", flip);
+el("prev").addEventListener("click", e=>{e.stopPropagation();go(-1);});
+el("next").addEventListener("click", e=>{e.stopPropagation();go(1);});
+el("shuffleBtn").addEventListener("click", shuffle);
+el("resetBtn").addEventListener("click", ()=>{
+  mode="cards";
+  document.querySelectorAll(".mode").forEach(x=>x.classList.remove("on"));
+  document.querySelector('.mode[data-mode="cards"]').classList.add("on");
+  order=CARDS.map((_,i)=>i); pos=0; resetFilterUI(); render();
+});
+el("confBtn").addEventListener("click", ()=>setStatus("conf"));
+el("revBtn").addEventListener("click", ()=>setStatus("rev"));
+
+document.querySelectorAll(".mode").forEach(b=>{
+  b.addEventListener("click", ()=>{
+    document.querySelectorAll(".mode").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on"); mode=b.dataset.mode;
+    order=deck().map((_,i)=>i); pos=0; resetFilterUI(); render();
+  });
+});
+
+document.querySelectorAll(".filt").forEach(ch=>{
+  ch.addEventListener("click", ()=>{
+    document.querySelectorAll(".filt").forEach(x=>x.classList.remove("on"));
+    ch.classList.add("on"); filter=ch.dataset.filt; pos=0; render();
+  });
+});
+
+document.addEventListener("keydown", e=>{
+  if(e.code==="Space"||e.code==="Enter"){e.preventDefault();flip();}
+  else if(e.code==="ArrowRight") go(1);
+  else if(e.code==="ArrowLeft") go(-1);
+  else if(e.key==="s"||e.key==="S") shuffle();
+});
+
+loadStatus();
+</script>
+</body>
+</html>
