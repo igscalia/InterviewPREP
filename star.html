@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAR Trainer — Behavioural Interview</title>
+<style>
+  :root{
+    --bg:#e9eef2;--ink:#12314f;--ink-soft:#3d5872;--teal:#0e7c86;--teal-deep:#0a5960;
+    --paper:#ffffff;--line:#d5dee6;
+    --patient:#0e7c86;--comm:#2f6fb5;--super:#6b4e9e;
+    --flag-bg:#fdf3e3;--flag-ink:#9a5b00;--flag-line:#e9b978;
+    --mono:"SFMono-Regular",ui-monospace,"Menlo","Consolas",monospace;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:18px 14px 48px}
+  .wrap{width:100%;max-width:760px}
+  header.top{margin-bottom:14px}
+  .title{font-size:21px;font-weight:750;letter-spacing:.2px;line-height:1.1}
+  .title small{display:block;font-size:11px;font-weight:500;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+  .tabs{display:inline-flex;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:3px;margin-bottom:16px;gap:3px}
+  .tab{font-family:var(--mono);font-size:11px;letter-spacing:.03em;text-transform:uppercase;border:none;background:transparent;color:var(--ink-soft);padding:8px 13px;border-radius:7px;cursor:pointer;transition:.12s}
+  .tab:hover{color:var(--teal-deep)}
+  .tab.on{background:var(--ink);color:#fff}
+  .panel{display:none}
+  .panel.on{display:block}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;box-shadow:0 8px 24px -20px rgba(18,49,79,.5)}
+  .fl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-deep);border-bottom:1px solid var(--line);padding-bottom:4px;margin-bottom:9px}
+  .card h2{font-size:16px;margin:0 0 10px}
+  .card p{font-size:14px;line-height:1.56;margin:0 0 9px}
+  .card p:last-child{margin-bottom:0}
+  .card b{color:var(--ink)}
+
+  /* STAR spine */
+  .spine .row{display:flex;gap:12px;position:relative;padding-bottom:14px}
+  .spine .row:last-child{padding-bottom:0}
+  .spine .letter{flex:0 0 30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:14px;color:#fff;background:var(--teal);z-index:1}
+  .spine .row.refl .letter{background:var(--flag-ink);font-size:10px}
+  .spine .stem-line{position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--line)}
+  .spine .row:last-child .stem-line{display:none}
+  .spine .body{flex:1;padding-top:4px}
+  .spine .body .k{font-weight:700;font-size:13.5px;margin-bottom:2px}
+  .spine .body .d{font-size:13px;color:var(--ink-soft);line-height:1.5}
+
+  .pill{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:20px;color:#fff;margin-right:6px}
+  .pill.patient{background:var(--patient)} .pill.comm{background:var(--comm)} .pill.super{background:var(--super)}
+
+  /* filter chips */
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);padding:6px 11px;border-radius:20px;cursor:pointer;user-select:none;transition:.12s}
+  .chip:hover{border-color:var(--teal)}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .chip.on.patient{background:var(--patient);border-color:var(--patient)}
+  .chip.on.comm{background:var(--comm);border-color:var(--comm)}
+  .chip.on.super{background:var(--super);border-color:var(--super)}
+
+  /* question bank */
+  details.q{background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+  details.q>summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.45;font-weight:600}
+  details.q>summary::-webkit-details-marker{display:none}
+  details.q>summary .tag{flex:0 0 auto;width:9px;height:9px;border-radius:50%;margin-top:6px}
+  .tag.patient{background:var(--patient)} .tag.comm{background:var(--comm)} .tag.super{background:var(--super)}
+  details.q>summary .chev{margin-left:auto;flex:0 0 auto;color:var(--ink-soft);font-family:var(--mono);font-size:11px;padding-top:2px}
+  details.q[open]>summary .chev::after{content:"HIDE"}
+  details.q:not([open])>summary .chev::after{content:"ASSESS"}
+  details.q .inner{padding:0 16px 15px 35px}
+  details.q .inner .fl{margin-top:6px}
+  details.q .inner ul{margin:0;padding-left:18px}
+  details.q .inner li{font-size:13px;line-height:1.5;margin-bottom:4px;color:var(--ink)}
+  details.q .inner p{font-size:13px;line-height:1.5;margin:0}
+
+  /* story form */
+  label.field{display:block;margin-bottom:12px}
+  label.field .lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-deep);display:block;margin-bottom:5px}
+  input[type=text],textarea,select{width:100%;font-family:var(--sans);font-size:14px;color:var(--ink);background:#fbfcfd;border:1px solid var(--line);border-radius:8px;padding:9px 11px;line-height:1.5}
+  input[type=text]:focus,textarea:focus,select:focus{outline:none;border-color:var(--teal)}
+  textarea{resize:vertical;min-height:58px}
+  .hint{font-size:11.5px;color:var(--ink-soft);margin-top:3px;line-height:1.4}
+  .btn{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--teal);background:var(--teal);color:#fff;padding:10px 16px;border-radius:8px;cursor:pointer;transition:.12s}
+  .btn:hover{background:var(--teal-deep);border-color:var(--teal-deep)}
+  .btn.ghost{background:var(--paper);color:var(--ink);border-color:var(--line)}
+  .btn.ghost:hover{border-color:var(--teal);color:var(--teal-deep);background:var(--paper)}
+  .btn.small{padding:6px 10px;font-size:10px}
+  .row-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+
+  .story{background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+  .story .head{padding:12px 15px;display:flex;align-items:center;gap:9px;cursor:pointer}
+  .story .head .name{font-weight:650;font-size:14.5px}
+  .story .head .chev{margin-left:auto;color:var(--ink-soft);font-family:var(--mono);font-size:11px}
+  .story .detail{padding:0 15px 14px;display:none}
+  .story.open .detail{display:block}
+  .story .detail .seg{margin-bottom:9px}
+  .story .detail .seg .k{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-deep);margin-bottom:2px}
+  .story .detail .seg .v{font-size:13.5px;line-height:1.5;white-space:pre-wrap}
+  .empty{color:var(--ink-soft);font-size:13.5px;line-height:1.5;padding:6px 2px}
+
+  /* practice */
+  .draw-area{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:20px 18px;margin-bottom:14px;min-height:120px}
+  .draw-q{font-size:17px;font-weight:650;line-height:1.4;margin-bottom:6px}
+  .draw-meta{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .timer{font-family:var(--mono);font-size:34px;font-weight:700;letter-spacing:1px;text-align:center;margin:6px 0 12px;color:var(--ink)}
+  .timer.warn{color:var(--flag-ink)}
+  .timer.over{color:#b0492b}
+  .checklist{list-style:none;padding:0;margin:8px 0 0}
+  .checklist li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;line-height:1.5;padding:5px 0}
+  .checklist input{margin-top:3px}
+  .flag{background:var(--flag-bg);border:1px solid var(--flag-line);border-radius:8px;padding:11px 13px;margin-top:10px}
+  .flag .fl{color:var(--flag-ink);border-bottom-color:var(--flag-line)}
+  .flag p,.flag li{color:#7a4b06}
+  .kbd-help{font-family:var(--mono);font-size:11px;color:var(--ink-soft);opacity:.8;margin-top:6px}
+  @media(max-width:520px){.timer{font-size:30px}}
+  details.q .inner ol{margin:0;padding-left:18px}
+  details.q .inner ol li{font-size:13px;line-height:1.5;margin-bottom:5px;color:var(--ink)}
+  .appnav{margin:-4px 0 14px}
+  .appnav a{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--teal-deep);text-decoration:none;border:1px solid var(--line);background:var(--paper);padding:6px 11px;border-radius:20px;display:inline-block}
+  .appnav a:hover{border-color:var(--teal)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="title">STAR Trainer<small>Behavioural stations · Patient Focus · Communication · Staff Supervision</small></div>
+  </header>
+
+  <div class="appnav"><a href="index.html">← Flashcards</a></div>
+
+  <div class="tabs">
+    <button class="tab on" data-tab="framework">Framework</button>
+    <button class="tab" data-tab="bank">Questions</button>
+    <button class="tab" data-tab="situational">Situational</button>
+    <button class="tab" data-tab="stories">My stories</button>
+    <button class="tab" data-tab="practice">Practice</button>
+  </div>
+
+  <!-- FRAMEWORK -->
+  <section class="panel on" id="framework">
+    <div class="card">
+      <div class="fl">The interview</div>
+      <p>Four questions, roughly five minutes each, in front of a panel of nephrology Heads of Department from the Queensland training sites. Three are behavioural and scored against <b>Patient Focus</b>, <b>Communication</b> and <b>Staff Supervision</b>; the fourth is the clinical vignette (<b>Clinical Expertise</b>). They are marking a <b>safe, reflective first-year advanced trainee</b>, not a subspecialist.</p>
+    </div>
+
+    <div class="card">
+      <div class="fl">STAR, with a fifth step</div>
+      <div class="spine">
+        <div class="row"><div class="letter">S</div><div class="stem-line"></div><div class="body"><div class="k">Situation</div><div class="d">Set the scene in one or two sentences. Who, where, when. Resist over-explaining the backstory.</div></div></div>
+        <div class="row"><div class="letter">T</div><div class="stem-line"></div><div class="body"><div class="k">Task</div><div class="d">Your specific responsibility or the challenge you faced. Make it clear what was on you.</div></div></div>
+        <div class="row"><div class="letter">A</div><div class="stem-line"></div><div class="body"><div class="k">Action</div><div class="d">What you did, step by step. This is the bulk of the answer. Say "I", not "we", and show your reasoning and the behaviour they are scoring.</div></div></div>
+        <div class="row"><div class="letter">R</div><div class="stem-line"></div><div class="body"><div class="k">Result</div><div class="d">What happened. Make it concrete, and give credit to the team where it is due.</div></div></div>
+        <div class="row refl"><div class="letter">Ref</div><div class="body"><div class="k">Reflection</div><div class="d">What you learned or would do differently. Panels weight this heavily because it shows insight. Do not skip it.</div></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="fl">What good looks like</div>
+      <p>Safe and patient-centred, a team player who escalates appropriately and knows the limits of their role, and someone who reflects honestly. They want to hear that you sought help at the right moment, not that you handled everything alone.</p>
+    </div>
+
+    <div class="card">
+      <div class="fl">Common pitfalls</div>
+      <p><b>Rambling setup, no result.</b> Keep Situation short and always land the Result and Reflection.</p>
+      <p><b>Hiding in "we".</b> If your own action is invisible, they cannot score you. Say what you did.</p>
+      <p><b>Wrong story for the competency.</b> A great story that does not demonstrate the behaviour asked scores poorly. Match the story to the question.</p>
+      <p><b>Being vague.</b> Use one specific incident, not "generally I would...".</p>
+      <p><b>No reflection.</b> The reflective close is where marks are won.</p>
+    </div>
+
+    <div class="card">
+      <div class="fl">Prep strategy</div>
+      <p>Build <b>six to eight concrete stories</b> from your career (RBWH, Mayo, PhD, teaching, QI). Tag each to the competencies it can serve; most flex across two or three. Rehearse out loud to time: aim for a tight <b>90 seconds to two minutes</b> on the core answer, then handle the probes. Prepare the Result and Reflection for every story in advance.</p>
+    </div>
+  </section>
+
+  <!-- QUESTIONS -->
+  <section class="panel" id="bank">
+    <div class="chips" id="bankChips">
+      <div class="chip on" data-c="all">All</div>
+      <div class="chip patient" data-c="patient">Patient Focus</div>
+      <div class="chip comm" data-c="comm">Communication</div>
+      <div class="chip super" data-c="super">Staff Supervision</div>
+    </div>
+    <div id="bankList"></div>
+  </section>
+
+  <!-- SITUATIONAL -->
+  <section class="panel" id="situational">
+    <div class="card"><div class="fl">Situational judgement</div><p>These are "what would you do" scenarios rather than "tell me about a time". Tap each to reveal a structured model approach and the frameworks worth naming. Try answering out loud first.</p></div>
+    <div id="sitList"></div>
+  </section>
+
+  <!-- MY STORIES -->
+  <section class="panel" id="stories">
+    <div class="card">
+      <div class="fl" id="formTitle">New story</div>
+      <label class="field"><span class="lab">Title</span><input type="text" id="f_title" placeholder="e.g. Advocating for conservative management on the ward"></label>
+      <label class="field"><span class="lab">Competency</span>
+        <select id="f_comp">
+          <option value="patient">Patient Focus</option>
+          <option value="comm">Communication</option>
+          <option value="super">Staff Supervision</option>
+          <option value="multi">Multiple / flexible</option>
+        </select>
+      </label>
+      <label class="field"><span class="lab">S — Situation</span><textarea id="f_s" placeholder="One or two sentences. Who, where, when."></textarea></label>
+      <label class="field"><span class="lab">T — Task</span><textarea id="f_t" placeholder="Your specific responsibility or the challenge."></textarea></label>
+      <label class="field"><span class="lab">A — Action</span><textarea id="f_a" placeholder="What you did, step by step. Use 'I'." style="min-height:90px"></textarea></label>
+      <label class="field"><span class="lab">R — Result</span><textarea id="f_r" placeholder="What happened. Make it concrete."></textarea></label>
+      <label class="field"><span class="lab">Reflection</span><textarea id="f_refl" placeholder="What you learned or would do differently."></textarea>
+        <div class="hint">This is where marks are won. Always fill it in.</div>
+      </label>
+      <label class="field"><span class="lab">Transferable themes / other questions it answers</span><input type="text" id="f_themes" placeholder="e.g. patient misunderstanding, advocacy, escalating safely">
+        <div class="hint">One story can answer several questions. Note the themes so you can redeploy it.</div>
+      </label>
+      <div class="row-btns">
+        <button class="btn" id="saveStory">Save story</button>
+        <button class="btn ghost" id="clearStory">Clear</button>
+      </div>
+    </div>
+    <details class="card" id="ioCard">
+      <summary style="cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-deep);list-style:none">Backup / move to another device</summary>
+      <p class="hint" style="margin:10px 0 8px">Stories save only in this browser. To move them to another device: on this one press Copy, paste the text somewhere you can reach (a note or email), then on the other device open this box, paste it in and press Load.</p>
+      <textarea id="ioBox" placeholder="Your exported stories appear here, or paste stories to import" style="min-height:84px;font-family:var(--mono);font-size:12px"></textarea>
+      <div class="row-btns" style="margin-top:8px">
+        <button class="btn ghost small" id="exportBtn">Copy my stories</button>
+        <button class="btn ghost small" id="importBtn">Load from text</button>
+      </div>
+    </details>
+    <div id="storyList"></div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section class="panel" id="practice">
+    <div class="chips" id="pracChips">
+      <div class="chip on" data-c="all">All</div>
+      <div class="chip patient" data-c="patient">Patient Focus</div>
+      <div class="chip comm" data-c="comm">Communication</div>
+      <div class="chip super" data-c="super">Staff Supervision</div>
+    </div>
+    <div class="draw-area" id="drawArea">
+      <div class="empty">Draw a question, answer it out loud to time, then reveal the probes and self-check.</div>
+    </div>
+    <div class="row-btns" style="margin-bottom:14px">
+      <button class="btn" id="drawBtn">Draw a question</button>
+      <button class="btn ghost" id="timerBtn">Start 2:00 timer</button>
+    </div>
+    <div id="revealArea"></div>
+  </section>
+</div>
+
+<script>
+const QUESTIONS = [
+  {id:"p1", c:"patient", q:"Tell us about a time you advocated for a patient whose wishes or best interests conflicted with the team's plan.",
+    scored:"Puts the patient at the centre, balances autonomy with safety, escalates appropriately, and holds a position respectfully.",
+    probes:["What did the patient actually want, and how did you establish that?","How did you raise it with the team?","What was the outcome, and would you do anything differently?"]},
+  {id:"p2", c:"patient", q:"Describe a time you cared for a patient with significant barriers to care (language, health literacy, cultural, disability, or social).",
+    scored:"Recognises equity and access, adapts communication, uses interpreters and supports, and individualises care.",
+    probes:["What specific adjustments did you make?","How did you check the patient understood?","What would you change next time?"]},
+  {id:"p3", c:"patient", q:"Tell us about a time a patient or family was unhappy with their care.",
+    scored:"Stays calm, listens, takes responsibility where due, and focuses on resolution and the therapeutic relationship.",
+    probes:["What was their concern from their point of view?","How did you respond in the moment?","How was it resolved?"]},
+  {id:"p4", c:"patient", q:"Describe a situation where you had to discuss a poor prognosis or goals of care.",
+    scored:"Handles hard conversations with honesty and empathy, checks understanding, and respects autonomy.",
+    probes:["How did you prepare and set up the conversation?","How did you respond to their emotion?","How did you involve the team and family?"]},
+  {id:"p5", c:"patient", q:"Tell us about a time you put a patient's interests ahead of convenience or the path of least resistance.",
+    scored:"Shows integrity, going the extra step, and genuine patient-centredness.",
+    probes:["What made you decide it was worth it?","What did it cost you or the team?","What was the result for the patient?"]},
+
+  {id:"c1", c:"comm", q:"Tell us about a disagreement with a senior colleague and how you handled it.",
+    scored:"Raises concerns respectfully and clearly, frames around the shared goal, escalates safely, and disagrees without damaging the relationship.",
+    probes:["What was your specific concern?","How did you raise it, and what words did you use?","What happened, and how is the relationship now?"]},
+  {id:"c2", c:"comm", q:"Describe a situation where a communication breakdown affected patient care.",
+    scored:"Recognises system and human factors, closes the loop, uses structured handover (ISBAR), and prevents recurrence.",
+    probes:["Where exactly did the communication fail?","What did you do once you noticed?","What did you put in place to stop it recurring?"]},
+  {id:"c3", c:"comm", q:"Tell us about a time you communicated complex or uncertain information to a patient or family.",
+    scored:"Tailors language, checks understanding, manages uncertainty honestly, and shows empathy.",
+    probes:["How did you pitch it to their level?","How did you handle their questions or distress?","How did you confirm they understood?"]},
+  {id:"c4", c:"comm", q:"Describe a time you had to give difficult feedback to a peer.",
+    scored:"Gives specific, timely, kind and constructive feedback while preserving the working relationship.",
+    probes:["What was the feedback and how did you frame it?","How did they respond?","What was the result?"]},
+  {id:"c5", c:"comm", q:"Tell us about a time you managed conflict within a team.",
+    scored:"De-escalates, seeks to understand all sides, keeps the focus on patient care, and reaches a workable resolution.",
+    probes:["What was driving the conflict?","What was your role in resolving it?","What was the outcome?"]},
+
+  {id:"s1", c:"super", q:"Tell us about a time you supervised or taught a junior colleague.",
+    scored:"Sets clear expectations, pitches teaching to their level, gives feedback, and supports development while keeping patients safe.",
+    probes:["How did you judge what they needed?","How did you check they were coping and safe?","What was the outcome for them and the patient?"]},
+  {id:"s2", c:"super", q:"Describe a situation where a junior colleague was struggling.",
+    scored:"Notices early, approaches supportively and without judgement, balances support with patient safety, and gets help appropriately.",
+    probes:["What made you notice?","How did you approach them?","How did you balance their wellbeing with patient safety, and who else did you involve?"]},
+  {id:"s3", c:"super", q:"Tell us about a time you had to delegate under pressure.",
+    scored:"Delegates to the right person with clear instructions, keeps oversight, and maintains situational awareness.",
+    probes:["How did you decide who did what?","How did you keep oversight?","What was the outcome?"]},
+  {id:"s4", c:"super", q:"Describe a time you had concerns about an underperforming or unwell colleague.",
+    scored:"Acts on patient safety, approaches with compassion, uses the right channels (supervisor, wellbeing pathways), and stays professional and confidential.",
+    probes:["What were your specific concerns?","What did you do first, and who did you involve?","How did you balance the colleague's welfare with patient safety?"]},
+  {id:"s5", c:"super", q:"Tell us about a time you led a team through a difficult or deteriorating clinical situation.",
+    scored:"Takes appropriate leadership, communicates clearly under pressure, allocates roles, and debriefs afterwards.",
+    probes:["What was your role and how did you establish it?","How did you communicate and allocate tasks?","How did you debrief and support the team afterwards?"]}
+];
+
+const SITUATIONS = [
+  {id:"sit1", comp:"super", scenario:"A hesitant intern comes to you privately to disclose that a patient has sexually harassed them.",
+    approach:["Lead with the person: listen, believe them, thank them for coming, and check they feel safe right now. Take them off that patient's care if you can.","Respect their autonomy: ask what they want to happen and what support they need, rather than taking over.","Support and escalate: incident report, their supervisor and your line manager, HR under Policy E5, and offer EAP.","Manage the patient's behaviour through the occupational violence pathway (behavioural agreement, safeguards) while ensuring necessary care continues.","Follow up afterwards. If it amounts to assault, add the police and sexual assault service options, on their terms."],
+    frameworks:["QLD Health HR Policy E5 (workplace sexual harassment; zero tolerance; applies to patient conduct)","Occupational Violence Prevention / Unacceptable Behaviour Framework","Employee Assistance Program","WHS psychosocial-hazard duties"]},
+  {id:"sit2", comp:"patient", scenario:"A 35-year-old Aboriginal man with diabetic nephropathy, on haemodialysis for three years, does not want the influenza vaccine.",
+    approach:["Respect autonomy: a competent adult may refuse, so coercion is never the answer.","Explore his reasons without judgement (past experience, distrust, misinformation, cultural factors, needle fear).","Inform: why influenza matters more for a dialysis patient, addressing his specific concerns.","Provide culturally safe care: consider involving an Aboriginal and Torres Strait Islander Health Worker or Liaison Officer, and be alert to well-founded historical mistrust.","Document the informed refusal, keep the door open to change his mind, and protect the therapeutic relationship. Dialysis care continues unchanged."],
+    frameworks:["Informed consent and the right to refuse","Cultural safety and shared decision-making","Aboriginal and Torres Strait Islander Health Worker / Liaison Officer involvement"]},
+  {id:"sit3", comp:"super", scenario:"An underperforming RMO offloads all jobs to the intern, disappears for hours, is not seen on the wards, and nurses are complaining.",
+    approach:["Patient safety first: ensure the intern is not unsafely overloaded and patients are covered.","Establish the facts objectively rather than acting on hearsay.","Approach the RMO privately, supportively and without judgement; burnout, a health issue or a personal crisis may sit underneath. Give specific feedback on the behaviour and its impact.","Distinguish performance from health: escalate a performance or conduct matter locally (term supervisor, DPET) with a remediation plan; route a wellbeing concern to EAP and support.","Only consider an AHPRA notification if it meets the threshold (a significant departure placing the public at substantial risk, impairment, intoxication or sexual misconduct). Underperformance alone is managed locally first. Support the intern too."],
+    frameworks:["AHPRA mandatory notification thresholds","Local performance management / DPET escalation","Employee Assistance Program"]}
+];
+
+const COMP = {patient:"Patient Focus", comm:"Communication", super:"Staff Supervision", multi:"Multiple / flexible"};
+const STORE_KEY = "star_stories_issy_v1";
+
+const store = {
+  async get(k){
+    if(typeof window!=="undefined" && window.storage && window.storage.get){ try{ return await window.storage.get(k); }catch(e){} }
+    try{ const v=localStorage.getItem(k); return v!=null?{value:v}:null; }catch(e){ return null; }
+  },
+  async set(k,v){
+    if(typeof window!=="undefined" && window.storage && window.storage.set){ try{ return await window.storage.set(k,v); }catch(e){} }
+    try{ localStorage.setItem(k,v); }catch(e){}
+  }
+};
+
+let stories = [];
+let editingId = null;
+let bankFilter = "all";
+let pracFilter = "all";
+const el = id=>document.getElementById(id);
+
+/* ---------- tabs ---------- */
+document.querySelectorAll(".tab").forEach(t=>{
+  t.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+    t.classList.add("on");
+    document.querySelectorAll(".panel").forEach(p=>p.classList.remove("on"));
+    el(t.dataset.tab).classList.add("on");
+  });
+});
+
+/* ---------- question bank ---------- */
+function renderBank(){
+  const list = el("bankList");
+  const items = QUESTIONS.filter(q=>bankFilter==="all"||q.c===bankFilter);
+  list.innerHTML = items.map(q=>`
+    <details class="q">
+      <summary><span class="tag ${q.c}"></span><span>${q.q}</span><span class="chev"></span></summary>
+      <div class="inner">
+        <div class="fl">What they're scoring</div>
+        <p>${q.scored}</p>
+        <div class="fl">Likely probes</div>
+        <ul>${q.probes.map(p=>`<li>${p}</li>`).join("")}</ul>
+      </div>
+    </details>`).join("");
+}
+el("bankChips").addEventListener("click", e=>{
+  const c=e.target.closest(".chip"); if(!c) return;
+  el("bankChips").querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
+  c.classList.add("on"); bankFilter=c.dataset.c; renderBank();
+});
+
+/* ---------- situational judgement ---------- */
+function renderSituations(){
+  el("sitList").innerHTML = SITUATIONS.map(s=>`
+    <details class="q">
+      <summary><span class="tag ${s.comp}"></span><span>${s.scenario}</span><span class="chev"></span></summary>
+      <div class="inner">
+        <div class="fl">Model approach</div>
+        <ol>${s.approach.map(a=>`<li>${a}</li>`).join("")}</ol>
+        <div class="fl">Frameworks to name</div>
+        <ul>${s.frameworks.map(f=>`<li>${f}</li>`).join("")}</ul>
+      </div>
+    </details>`).join("");
+}
+
+/* ---------- my stories ---------- */
+async function loadStories(){
+  try{ const r=await store.get(STORE_KEY); if(r&&r.value) stories=JSON.parse(r.value); }catch(e){ stories=[]; }
+  renderStories();
+}
+async function saveStories(){ try{ await store.set(STORE_KEY, JSON.stringify(stories)); }catch(e){} }
+
+function renderStories(){
+  const list=el("storyList");
+  if(!stories.length){ list.innerHTML=`<div class="empty">No stories yet. Write your first one above. Aim for six to eight across the three competencies.</div>`; return; }
+  list.innerHTML = stories.map(s=>`
+    <div class="story" data-id="${s.id}">
+      <div class="head"><span class="pill ${s.comp}">${COMP[s.comp]}</span><span class="name">${esc(s.title||"Untitled")}</span><span class="chev">OPEN</span></div>
+      <div class="detail">
+        ${seg("Situation",s.s)}${seg("Task",s.t)}${seg("Action",s.a)}${seg("Result",s.r)}${seg("Reflection",s.refl)}${seg("Also answers",s.themes)}
+        <div class="row-btns"><button class="btn ghost small edit">Edit</button><button class="btn ghost small del">Delete</button></div>
+      </div>
+    </div>`).join("");
+}
+function seg(k,v){ if(!v) return ""; return `<div class="seg"><div class="k">${k}</div><div class="v">${esc(v)}</div></div>`; }
+function esc(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+el("storyList").addEventListener("click", e=>{
+  const story=e.target.closest(".story"); if(!story) return;
+  const id=story.dataset.id;
+  if(e.target.classList.contains("edit")){ startEdit(id); return; }
+  if(e.target.classList.contains("del")){ stories=stories.filter(s=>s.id!==id); saveStories(); renderStories(); if(editingId===id) clearForm(); return; }
+  if(e.target.closest(".head")) story.classList.toggle("open");
+});
+
+function readForm(){
+  return {title:el("f_title").value.trim(), comp:el("f_comp").value, s:el("f_s").value.trim(),
+    t:el("f_t").value.trim(), a:el("f_a").value.trim(), r:el("f_r").value.trim(), refl:el("f_refl").value.trim(), themes:el("f_themes").value.trim()};
+}
+function startEdit(id){
+  const s=stories.find(x=>x.id===id); if(!s) return;
+  editingId=id;
+  el("f_title").value=s.title||""; el("f_comp").value=s.comp||"patient";
+  el("f_s").value=s.s||""; el("f_t").value=s.t||""; el("f_a").value=s.a||""; el("f_r").value=s.r||""; el("f_refl").value=s.refl||""; el("f_themes").value=s.themes||"";
+  el("formTitle").textContent="Editing story";
+  el("stories").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function clearForm(){
+  editingId=null;
+  ["f_title","f_s","f_t","f_a","f_r","f_refl","f_themes"].forEach(i=>el(i).value=""); el("f_comp").value="patient";
+  el("formTitle").textContent="New story";
+}
+el("saveStory").addEventListener("click", ()=>{
+  const d=readForm();
+  if(!d.title && !d.s && !d.a){ return; }
+  if(editingId){ const i=stories.findIndex(s=>s.id===editingId); if(i>-1) stories[i]={...stories[i],...d}; }
+  else { stories.unshift({id:"st_"+Date.now(),...d}); }
+  saveStories(); renderStories(); clearForm();
+});
+el("clearStory").addEventListener("click", clearForm);
+
+el("exportBtn").addEventListener("click", ()=>{
+  el("ioBox").value = JSON.stringify(stories);
+  el("ioBox").focus(); el("ioBox").select();
+  try{ navigator.clipboard.writeText(el("ioBox").value); }catch(e){}
+  el("exportBtn").textContent = "Copied";
+  setTimeout(()=>el("exportBtn").textContent="Copy my stories", 2200);
+});
+el("importBtn").addEventListener("click", ()=>{
+  try{
+    const arr = JSON.parse(el("ioBox").value.trim());
+    if(!Array.isArray(arr)) throw 0;
+    arr.forEach(s=>{
+      if(!s || typeof s!=="object") return;
+      if(!s.id) s.id = "st_"+Date.now()+Math.random().toString(36).slice(2,6);
+      const i = stories.findIndex(x=>x.id===s.id);
+      if(i>-1) stories[i]=s; else stories.push(s);
+    });
+    saveStories(); renderStories();
+    el("importBtn").textContent = "Loaded";
+    setTimeout(()=>el("importBtn").textContent="Load from text", 2000);
+  }catch(e){
+    el("importBtn").textContent = "Couldn't read that";
+    setTimeout(()=>el("importBtn").textContent="Load from text", 2200);
+  }
+});
+
+/* ---------- practice ---------- */
+let currentQ=null;
+el("pracChips").addEventListener("click", e=>{
+  const c=e.target.closest(".chip"); if(!c) return;
+  el("pracChips").querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
+  c.classList.add("on"); pracFilter=c.dataset.c;
+});
+el("drawBtn").addEventListener("click", ()=>{
+  const pool=QUESTIONS.filter(q=>pracFilter==="all"||q.c===pracFilter);
+  currentQ=pool[Math.floor(Math.random()*pool.length)];
+  el("drawArea").innerHTML=`<div class="draw-meta" style="color:var(--${currentQ.c})">${COMP[currentQ.c]}</div><div class="draw-q">${currentQ.q}</div>`;
+  el("revealArea").innerHTML=`<button class="btn ghost" id="revealBtn">Reveal probes &amp; self-check</button>`;
+  el("revealBtn").addEventListener("click", reveal);
+  resetTimer();
+});
+function reveal(){
+  el("revealArea").innerHTML=`
+    <div class="card">
+      <div class="fl">What they're scoring</div>
+      <p style="font-size:13.5px;line-height:1.5;margin:0 0 10px">${currentQ.scored}</p>
+      <div class="fl">Probes they may push on</div>
+      <ul style="margin:0;padding-left:18px">${currentQ.probes.map(p=>`<li style="font-size:13px;line-height:1.5;margin-bottom:4px">${p}</li>`).join("")}</ul>
+      <div class="flag">
+        <div class="fl">Self-check</div>
+        <ul class="checklist">
+          <li><input type="checkbox"> Clear S-T-A-R with a Situation kept short</li>
+          <li><input type="checkbox"> Specific incident, said "I" and my own actions were clear</li>
+          <li><input type="checkbox"> Landed a concrete Result</li>
+          <li><input type="checkbox"> Closed with honest Reflection</li>
+          <li><input type="checkbox"> Showed the behaviour asked (${COMP[currentQ.c].toLowerCase()}), and stayed inside ~2 minutes</li>
+        </ul>
+      </div>
+    </div>`;
+}
+/* timer */
+let tint=null, tleft=120;
+function fmt(s){ const m=Math.floor(s/60), r=s%60; return m+":"+String(r).padStart(2,"0"); }
+function paintTimer(){
+  let node=el("timerDisp");
+  if(!node){
+    el("drawArea").insertAdjacentHTML("beforeend", `<div class="timer" id="timerDisp"></div>`);
+    node=el("timerDisp");
+  }
+  node.textContent=fmt(Math.max(tleft,0));
+  node.className="timer"+(tleft<=30&&tleft>0?" warn":"")+(tleft<=0?" over":"");
+}
+function resetTimer(){ if(tint){clearInterval(tint);tint=null;} tleft=120; const n=el("timerDisp"); if(n) n.remove(); }
+el("timerBtn").addEventListener("click", ()=>{
+  if(tint){ clearInterval(tint); tint=null; el("timerBtn").textContent="Start 2:00 timer"; return; }
+  tleft=120; paintTimer(); el("timerBtn").textContent="Stop timer";
+  tint=setInterval(()=>{ tleft--; paintTimer(); if(tleft<=-1){ /* keep counting into overtime */ } }, 1000);
+});
+
+/* ---------- init ---------- */
+renderBank();
+renderSituations();
+loadStories();
+</script>
+</body>
+</html>
