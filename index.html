@@ -95,6 +95,15 @@
   .pip.aki{background:var(--aki)} .pip.lytes{background:var(--lytes)} .pip.mbd{background:var(--mbd)} .pip.dialysis{background:var(--dialysis)} .pip.transplant{background:var(--transplant)}
   .cat-label.aki{color:var(--aki)} .cat-label.lytes{color:var(--lytes)} .cat-label.mbd{color:var(--mbd)} .cat-label.dialysis{color:var(--dialysis)} .cat-label.transplant{color:var(--transplant)}
   .chip.on.aki{background:var(--aki);border-color:var(--aki)} .chip.on.lytes{background:var(--lytes);border-color:var(--lytes)} .chip.on.mbd{background:var(--mbd);border-color:var(--mbd)} .chip.on.dialysis{background:var(--dialysis);border-color:var(--dialysis)} .chip.on.transplant{background:var(--transplant);border-color:var(--transplant)}
+  .opts{display:flex;flex-direction:column;gap:8px;margin-top:16px;width:100%;max-width:430px}
+  .opt{font-family:var(--sans);font-size:14px;text-align:left;background:var(--paper);border:1px solid var(--line);color:var(--ink);padding:11px 13px;border-radius:9px;cursor:pointer;transition:.12s;line-height:1.35}
+  .opt:hover{border-color:var(--teal)}
+  .opt.done{cursor:default}
+  .opt.correct{background:#e7f5ef;border-color:#2f8f6b;color:#1c6647;font-weight:600}
+  .opt.wrong{background:#fbeaea;border-color:#b0492b;color:#8a3520}
+  .appnav{margin:-2px 0 12px}
+  .appnav a{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--teal-deep);text-decoration:none;border:1px solid var(--line);background:var(--paper);padding:6px 11px;border-radius:20px;display:inline-block}
+  .appnav a:hover{border-color:var(--teal)}
 </style>
 </head>
 <body>
@@ -103,6 +112,8 @@
     <div class="title">Glomerulonephritis &amp; Nephropathies<small>AT interview · learn · reason off the stem · recall cold</small></div>
     <div class="count"><b id="posNow">1</b> / <span id="posTot">12</span> <span id="confTag" style="margin-left:8px"></span></div>
   </header>
+
+  <div class="appnav"><a href="star.html">STAR behavioural trainer →</a></div>
 
   <div class="modeswitch">
     <button class="mode on" data-mode="cards">Conditions</button>
@@ -170,7 +181,7 @@ const CARDS = [
       {l:"Presentation", html:`<p>Most commonly <b>synpharyngitic haematuria</b> — visible haematuria within 1–2 days of a mucosal (URTI or GI) infection. Also asymptomatic microscopic haematuria + subnephrotic proteinuria found on screening. Minority: nephrotic syndrome, AKI, or rapidly progressive (crescentic) disease.</p>`},
       {l:"Investigations", html:`<p><span class="sub">Urine</span> dysmorphic RBCs, RBC casts, variable protein.</p><p><span class="sub">Bloods</span> <b>normal complement</b>; serum IgA raised in ~half (not diagnostic).</p><p><span class="sub">Biopsy</span> LM: mesangial proliferation. <b>IF: dominant mesangial IgA</b> (± C3, IgG). EM: mesangial/paramesangial deposits. Report with the <b>Oxford MEST-C</b> score for prognosis.</p>`},
       {l:"Buzzwords & links", html:`<p><b>Most common primary GN worldwide.</b> East Asian &gt; European prevalence. Galactose-deficient IgA1 → "four-hit" model. Renal-limited form of <b>IgA vasculitis (HSP)</b>. Secondary IgA with cirrhosis, coeliac, HIV.</p>`},
-      {l:"Management (KDIGO 2025 · AU)", html:`<p><b>Pillar 1 — optimise the CKD bundle for ≥90 days:</b> max-tolerated ACEi/ARB, add an SGLT2 inhibitor, BP target, lifestyle. Target proteinuria <b>&lt;0.5 g/day (ideally &lt;0.3)</b>.</p><p><b>Pillar 2 — if proteinuria stays ≥0.75–1 g/day at high risk:</b> targeted-release budesonide (Nefecon 16 mg/day, 9 months) or a reduced-dose systemic steroid course; consider <b>sparsentan</b> (TGA-designated in AU for proteinuria ≥1 g/day — check current PBS status). <b>Rituximab is NOT recommended.</b></p><p>Rapidly progressive / crescentic IgAN → treat as per ANCA vasculitis (cyclophosphamide + steroids).</p>`}
+      {l:"Management (KDIGO 2025 · AU)", html:`<p><b>Pillar 1 — optimise the CKD bundle for ≥90 days:</b> max-tolerated ACEi/ARB, add an SGLT2 inhibitor, BP target, lifestyle. Target proteinuria <b>&lt;0.5 g/day (ideally &lt;0.3)</b>.</p><p><b>Pillar 2 — if proteinuria persists ≥0.5 g/day despite supportive care:</b> targeted-release budesonide (Nefecon 16 mg/day, 9 months) or a reduced-dose systemic steroid course; consider <b>sparsentan</b> (TGA-designated in AU for proteinuria ≥1 g/day — check current PBS status). <b>Rituximab is NOT recommended.</b></p><p>Rapidly progressive / crescentic IgAN → treat as per ANCA vasculitis (cyclophosphamide + steroids).</p>`}
     ],
     pearl:"Do not reach for immunosuppression before the supportive bundle has been maximised and given time — the 2025 guideline sharpened this. Steroids in IgAN carry real infection risk (TESTING/STOP-IgAN). Sparsentan and SGLT2i now sit in the supportive pillar, not the immune one."},
   {id:"mcd", cat:"nephrotic", dx:"Minimal Change Disease",
@@ -188,7 +199,7 @@ const CARDS = [
       {l:"Presentation", html:`<p>Nephrotic syndrome (often with hypertension and some renal impairment) in <b>primary</b> disease; <b>secondary/adaptive</b> forms present with subnephrotic proteinuria and slower course. Commonest cause of nephrotic syndrome in adults of African ancestry.</p>`},
       {l:"Investigations", html:`<p><span class="sub">Urine</span> proteinuria (nephrotic in primary; sub-nephrotic in adaptive), variable haematuria.</p><p><span class="sub">Biopsy</span> LM: <b>focal</b> (some glomeruli), <b>segmental</b> (part of the tuft) sclerosis/hyalinosis — sampling-dependent. IF: nonspecific IgM/C3 in sclerotic segments. <b>EM: diffuse foot-process effacement in primary; segmental in secondary</b> — this split guides treatment.</p>`},
       {l:"Buzzwords & links", html:`<p><b>APOL1</b> risk variants (African ancestry). Secondary causes: HIV (<b>collapsing</b> variant), heroin, obesity, reflux nephropathy, reduced nephron mass, pamidronate/anabolic steroids. Genetic (podocyte gene) forms in children/familial.</p>`},
-      {l:"Management (KDIGO · AU)", html:`<p><b>Primary (diffuse effacement, nephrotic):</b> high-dose prednisolone; CNI or rituximab if steroid-resistant/dependent. </p><p><b>Secondary/adaptive:</b> do NOT immunosuppress — RAS blockade, SGLT2 inhibitor, weight/BP management, treat the driver. Sparsentan is under FDA review for FSGS.</p>`}
+      {l:"Management (KDIGO · AU)", html:`<p><b>Primary (diffuse effacement, nephrotic):</b> high-dose prednisolone; CNI or rituximab if steroid-resistant/dependent. </p><p><b>Secondary/adaptive:</b> do NOT immunosuppress — RAS blockade, SGLT2 inhibitor, weight/BP management, treat the driver. Sparsentan (Filspari) gained FDA approval for FSGS (without nephrotic syndrome) to reduce proteinuria in Apr 2026, as a non-immunosuppressive option; confirm Australian TGA/PBS availability.</p>`}
     ],
     pearl:"The primary-vs-secondary distinction is the whole exam. Immunosuppressing an adaptive FSGS (obesity, single kidney) is a classic error — segmental foot-process effacement and subnephrotic protein point away from primary disease."},
   {id:"membranous", cat:"nephrotic", dx:"Membranous Nephropathy",
@@ -251,9 +262,9 @@ const CARDS = [
       {l:"Presentation", html:`<p>Gradual course over years: <b>hyperfiltration → albuminuria (micro→macro) → declining GFR</b>. Usually accompanied by diabetic <b>retinopathy</b> (especially in type 1). Leading cause of end-stage kidney disease.</p>`},
       {l:"Investigations", html:`<p><span class="sub">Urine</span> <b>albuminuria</b>: A2 (UACR 3–30 mg/mmol) to A3 (&gt;30 mg/mmol); can reach nephrotic range.</p><p><span class="sub">Biopsy</span> (only if atypical) GBM thickening, mesangial expansion, <b>Kimmelstiel–Wilson nodules</b>, hyaline arteriolosclerosis.</p><p><span class="sub">Red flags for a non-diabetic cause</span> absent retinopathy, active sediment, rapid GFR loss, or nephrotic onset without a diabetic timeline → biopsy.</p>`},
       {l:"Buzzwords & links", html:`<p>Kimmelstiel–Wilson nodules, nodular glomerulosclerosis, hyperfiltration then decline.</p>`},
-      {l:"Management — four pillars (AU)", html:`<p><b>1. RAS blockade</b> — max-tolerated ACEi/ARB (cornerstone). <b>2. SGLT2 inhibitor</b> (dapagliflozin/empagliflozin; PBS-listed for CKD). <b>3. Finerenone</b> — non-steroidal MRA; PBS-listed since Jul 2023 for CKD + T2DM, <b>UACR ≥22.6 mg/mmol, eGFR ≥25, K⁺ ≤5.0</b>, on a RAS blocker + SGLT2i; watch hyperkalaemia; not with steroidal MRAs. <b>4. GLP-1 RA</b> (semaglutide; TGA-approved to slow kidney decline, no PBS CKD-specific listing yet). Plus BP, glycaemic and lipid control.</p>`}
+      {l:"Management — four pillars (AU)", html:`<p><b>1. RAS blockade</b> — max-tolerated ACEi/ARB (cornerstone). <b>2. SGLT2 inhibitor</b> (dapagliflozin/empagliflozin; PBS-listed for CKD). <b>3. Finerenone</b> — non-steroidal MRA; PBS-listed since Jul 2023 for CKD + T2DM with albuminuria, on a RAS blocker (usually plus an SGLT2i). Do not start if <b>eGFR &lt;25</b> or <b>K⁺ &gt;5.0</b>; withhold if K⁺ &gt;5.5; watch hyperkalaemia; not with steroidal MRAs. (Confirm the current PBS albuminuria threshold.) <b>4. GLP-1 RA</b> (semaglutide; TGA-approved to slow kidney decline, no PBS CKD-specific listing yet). Plus BP, glycaemic and lipid control.</p>`}
     ],
-    pearl:"Diabetic nephropathy without retinopathy should make you doubt the diagnosis and consider biopsy. The four-pillar approach is current bread-and-butter — know the finerenone PBS criteria (eGFR ≥25, UACR ≥22.6, K⁺ ≤5.0, on RAS + SGLT2i) cold, because that's exactly the number they'll ask for."},
+    pearl:"Diabetic nephropathy without retinopathy should make you doubt the diagnosis and consider biopsy. The four-pillar approach is current bread-and-butter — know the finerenone initiation limits (do not start if eGFR &lt;25 or K⁺ &gt;5.0; withhold if K⁺ &gt;5.5) cold, and check the current PBS albuminuria threshold rather than quoting a number you are unsure of."},
   {id:"rpgn", cat:"nephritic", dx:"RPGN / Crescentic GN — the synthesis",
     stem:"Not one disease — a syndrome. Creatinine climbing over weeks + crescents on biopsy. Immunofluorescence sorts it into three.",
     fields:[
@@ -403,7 +414,7 @@ const VIGNETTES = [
     fields:[
       {l:"Is it diabetic nephropathy?", html:`<p><b>Yes, most likely.</b> Long duration, gradual albuminuria, concurrent <b>retinopathy</b>, and a bland sediment are the typical package.</p>`},
       {l:"What would make you biopsy", html:`<p>Features suggesting a <b>non-diabetic</b> cause: <b>absent retinopathy</b>, active sediment (dysmorphic RBCs/casts), rapid GFR decline, abrupt nephrotic-range proteinuria, or short diabetes duration.</p>`},
-      {l:"Management — four pillars", html:`<p>Max-tolerated <b>RAS blockade</b>; <b>SGLT2 inhibitor</b>; <b>finerenone</b> (if UACR ≥22.6 mg/mmol, eGFR ≥25, K⁺ ≤5.0, on RAS + SGLT2i); <b>GLP-1 RA</b> (e.g. semaglutide); plus BP, glycaemic and lipid control.</p>`}
+      {l:"Management — four pillars", html:`<p>Max-tolerated <b>RAS blockade</b>; <b>SGLT2 inhibitor</b>; <b>finerenone</b> (CKD with albuminuria in T2DM; do not start if eGFR &lt;25 or K⁺ &gt;5.0); <b>GLP-1 RA</b> (e.g. semaglutide); plus BP, glycaemic and lipid control.</p>`}
     ],
     pearl:"Retinopathy is your friend — its presence supports diabetic nephropathy, its absence should push you toward biopsy. Know the finerenone eligibility numbers precisely."},
   {id:"vg10", cat:"mixed",
@@ -574,6 +585,17 @@ const VIGNETTES = [
       {l:"Management", html:`<p><b>Aggressive IV fluid resuscitation</b> to maintain urine output; treat hyperkalaemia (protect, shift, remove); manage the precipitant; do not correct asymptomatic hypocalcaemia early. Dialysis if complications are refractory.</p>`}
     ],
     pearl:"Dipstick blood without red cells on microscopy is myoglobin, not haematuria. The AKI answer is early, generous fluids and treating the hyperkalaemia; watch for compartment syndrome."}
+,
+  {id:"vg28", cat:"nephrotic",
+    stem:"A 20-year-old woman presents with four weeks of fatigue, weight gain and oedema. Creatinine is 110 µmol/L, serum albumin 18 g/L, urine PCR 1200 mg/mmol.",
+    q:"Give your differential and your diagnostic workup.",
+    fields:[
+      {l:"Framing", html:`<p><b>Nephrotic syndrome</b> — PCR 1200 mg/mmol is roughly 12 g/day, and an albumin of 18 is severe.</p>`},
+      {l:"Differential", html:`<p>In a <b>young woman, lupus nephritis must lead the list</b>, alongside minimal change disease, FSGS and membranous nephropathy. Consider secondary causes and drugs (NSAIDs).</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Urine</span> microscopy: dysmorphic RBCs/casts suggest a proliferative or lupus picture; bland suggests MCD/FSGS/membranous.</p><p><span class="sub">Bloods</span> C3/C4, ANA, anti-dsDNA and ENA, anti-PLA2R, hepatitis B/C, HIV, lipids, coagulation profile.</p><p><span class="sub">Definitive</span> kidney biopsy names the lesion and, if lupus, gives the ISN/RPS class.</p>`},
+      {l:"Management pointer", html:`<p>Supportive while awaiting histology: salt restriction, diuretics, RAS blockade, statin, and address the <b>high VTE risk</b> (albumin 18 is strongly prothrombotic). Disease-specific therapy follows the biopsy.</p>`}
+    ],
+    pearl:"Young woman plus nephrotic syndrome means exclude lupus, and biopsy is essential. Do not forget the thromboembolic risk: with an albumin this low, VTE prophylaxis is a live consideration."}
 ];
 
 const QUIZ = [
@@ -624,7 +646,7 @@ const QUIZ = [
   {id:"q45", cat:"nephrotic", topic:"Diabetic nephropathy", q:"What is the pathognomonic biopsy nodule?", a:"Kimmelstiel-Wilson nodules (nodular glomerulosclerosis)."},
   {id:"q46", cat:"nephrotic", topic:"Diabetic nephropathy", q:"Which clinical finding supports the diagnosis, and whose absence should prompt a biopsy?", a:"Diabetic retinopathy."},
   {id:"q47", cat:"nephrotic", topic:"Diabetic nephropathy", q:"Name the four pillars of therapy.", a:"RAS blockade, SGLT2 inhibitor, finerenone, and a GLP-1 receptor agonist (plus BP, glycaemic and lipid control)."},
-  {id:"q48", cat:"nephrotic", topic:"Diabetic nephropathy", q:"State the finerenone PBS eligibility numbers.", a:"eGFR at or above 25, UACR at or above 22.6 mg/mmol, potassium at or below 5.0, already on a RAS blocker plus an SGLT2 inhibitor."},
+  {id:"q48", cat:"nephrotic", topic:"Diabetic nephropathy", q:"What are the finerenone initiation limits?", a:"Do not start if eGFR is below 25 or serum potassium is above 5.0; withhold if potassium exceeds 5.5. It is for CKD with albuminuria in type 2 diabetes, on background RAS blockade (usually with an SGLT2 inhibitor). Confirm the current PBS albuminuria threshold.", note:"The 22.6 mg/mmol UACR figure belongs to dapagliflozin's criteria, not finerenone; do not conflate them."},
   {id:"q49", cat:"nephritic", topic:"RPGN", q:"How is rapidly progressive GN defined?", a:"A fall in GFR of at least 50% over days to weeks, with crescents on biopsy."},
   {id:"q50", cat:"nephritic", topic:"RPGN", q:"Name the three immunofluorescence patterns and a cause of each.", a:"Linear (anti-GBM), granular (immune-complex: post-strep, lupus, IgA, cryo), and pauci-immune (ANCA)."},
   {id:"q51", cat:"nephritic", topic:"RPGN", q:"What is the single most useful early investigation?", a:"The combined immunology screen sent as a bundle: ANCA, anti-GBM, complement, ANA/anti-dsDNA (plus infection and paraprotein screens)."},
@@ -742,11 +764,18 @@ function render(){
     el("tabF").className = "tab neutral";
     el("tabB").className = "tab "+c.cat;
     fb.className = "body";
-    fb.innerHTML = `<div class="cat-label" style="color:var(--teal-deep)">${c.topic}</div>`
-      + `<div class="qz">${c.q}</div>`;
-    el("flipHintF").textContent = "Recall it, then tap to check";
+    let front = `<div class="cat-label" style="color:var(--teal-deep)">${c.topic}</div><div class="qz">${c.q}</div>`;
+    if(c.options){
+      front += `<div class="opts">` + c.options.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join("") + `</div>`;
+      el("flipHintF").textContent = "Pick an answer, then tap the card for why";
+    } else {
+      el("flipHintF").textContent = "Recall it, then tap to check";
+    }
+    fb.innerHTML = front;
+    fb.dataset.answered = "";
     let html = `<div class="dx-mini"><span class="pip ${c.cat}"></span>${c.topic}</div>`;
-    html += `<div class="field ans"><div class="fl">Answer</div><p>${c.a}</p></div>`;
+    if(c.options){ html += `<div class="field"><div class="fl">Answer</div><p><b>${c.options[c.answer]}</b></p></div>`; }
+    html += `<div class="field ans"><div class="fl">${c.options?"Why":"Answer"}</div><p>${c.a}</p></div>`;
     if(c.note) html += `<div class="flag"><div class="fl">Why it matters</div><p>${c.note}</p></div>`;
     el("backScroll").innerHTML = html;
   } else {
@@ -794,6 +823,22 @@ function resetFilterUI(){
 }
 
 card.addEventListener("click", flip);
+el("frontBody").addEventListener("click", e=>{
+  const opt = e.target.closest(".opt");
+  if(!opt) return;
+  e.stopPropagation();
+  if(el("frontBody").dataset.answered==="1") return;
+  const list = activeList(); if(!list.length) return;
+  const c = deck()[list[pos]];
+  if(!c || !c.options) return;
+  el("frontBody").dataset.answered = "1";
+  const chosen = +opt.dataset.i;
+  el("frontBody").querySelectorAll(".opt").forEach((b,i)=>{
+    b.classList.add("done");
+    if(i===c.answer) b.classList.add("correct");
+    else if(i===chosen) b.classList.add("wrong");
+  });
+});
 el("prev").addEventListener("click", e=>{e.stopPropagation();go(-1);});
 el("next").addEventListener("click", e=>{e.stopPropagation();go(1);});
 el("shuffleBtn").addEventListener("click", shuffle);
