@@ -7,7 +7,7 @@
 <style>
   :root{
     --bg:#e9eef2;--ink:#12314f;--ink-soft:#3d5872;--teal:#0e7c86;--teal-deep:#0a5960;
-    --paper:#ffffff;--line:#d5dee6;--nephritic:#b0492b;--nephrotic:#2f6fb5;--mixed:#6b4e9e;--aki:#c2641f;--lytes:#2f8f6b;--mbd:#9a7b2e;--dialysis:#a83d6a;--transplant:#4a5fa5;
+    --paper:#ffffff;--line:#d5dee6;--nephritic:#b0492b;--nephrotic:#2f6fb5;--mixed:#6b4e9e;--aki:#c2641f;--lytes:#2f8f6b;--mbd:#9a7b2e;--dialysis:#a83d6a;--transplant:#4a5fa5;--behav:#4f6472;
     --flag-bg:#fdf3e3;--flag-ink:#9a5b00;--flag-line:#e9b978;
     --mono:"SFMono-Regular",ui-monospace,"Menlo","Consolas",monospace;
     --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
@@ -101,6 +101,7 @@
   .opt.done{cursor:default}
   .opt.correct{background:#e7f5ef;border-color:#2f8f6b;color:#1c6647;font-weight:600}
   .opt.wrong{background:#fbeaea;border-color:#b0492b;color:#8a3520}
+  .tab.behav{background:var(--behav)} .pip.behav{background:var(--behav)} .cat-label.behav{color:var(--behav)} .chip.on.behav{background:var(--behav);border-color:var(--behav)}
   .appnav{margin:-2px 0 12px}
   .appnav a{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--teal-deep);text-decoration:none;border:1px solid var(--line);background:var(--paper);padding:6px 11px;border-radius:20px;display:inline-block}
   .appnav a:hover{border-color:var(--teal)}
@@ -131,6 +132,7 @@
     <div class="chip filt mbd" data-filt="mbd">CKD-MBD</div>
     <div class="chip filt dialysis" data-filt="dialysis">Dialysis</div>
     <div class="chip filt transplant" data-filt="transplant">Transplant</div>
+    <div class="chip filt behav" data-filt="behav">Behavioural</div>
     <div class="chip filt review" data-filt="review">Review only</div>
     <div class="spacer"></div>
     <button class="btn" id="shuffleBtn">Shuffle</button>
@@ -320,6 +322,24 @@ const CARDS = [
       {l:"PD complications", html:`<p><b>PD peritonitis</b> (cloudy bag, abdominal pain; send fluid for cell count and culture, intraperitoneal antibiotics), exit-site infection, catheter malfunction, hernias, ultrafiltration failure.</p>`}
     ],
     pearl:"AEIOU is the framework the panel wants for urgent dialysis. A PD patient with a cloudy bag and abdominal pain has PD peritonitis: send the effluent for cell count and culture and start intraperitoneal antibiotics. Protect the fistula arm (no cannulas or BP cuffs)."},
+  {id:"hd_emerg", cat:"dialysis", dx:"Haemodialysis: Emergencies & Access",
+    stem:"The dialysis unit calls: intradialytic crises and the access lifeline.",
+    fields:[
+      {l:"Intradialytic emergencies", html:`<p><b>Intradialytic hypotension</b> (commonest; excessive/rapid ultrafiltration, cardiac, sepsis, eating; treat with fluid, reduce UF, head-down, review target weight). Cramps. <b>Dialysis disequilibrium</b> (cerebral oedema from rapid solute shifts early; headache, nausea, seizures; prevent with gentle initial dialysis). Arrhythmia/arrest (electrolyte shifts). Air embolism, haemolysis, dialyser reaction/anaphylaxis.</p>`},
+      {l:"Access types & problems", html:`<p>Fistula (AVF) &gt; graft (AVG) &gt; tunnelled catheter. <span class="sub">AVF/AVG</span> thrombosis (loss of thrill/bruit; salvageable if early), stenosis (declining flows, prolonged bleeding), infection, aneurysm, high-output cardiac failure, steal syndrome (hand ischaemia). <span class="sub">Catheter</span> bacteraemia (the big one), poor flows/thrombosis, central venous stenosis.</p>`},
+      {l:"Access emergencies", html:`<p><b>Bleeding</b> from access: direct pressure (tourniquet and urgent help if catastrophic). <b>Thrombosed fistula:</b> urgent referral for salvage. <b>Catheter-related bloodstream infection:</b> peripheral and catheter cultures, empirical antibiotics per protocol (cover Staph including MRSA), and often line removal/exchange.</p>`},
+      {l:"Protect the access", html:`<p><b>No venepuncture, cannulation or BP cuff on the fistula arm.</b> Examine for thrill and bruit each time.</p>`}
+    ],
+    pearl:"Intradialytic hypotension is usually too much fluid off too fast; slow the ultrafiltration and reassess the target weight. Protect the fistula arm absolutely, and treat a catheter-related bloodstream infection as the dangerous one, with cultures and prompt antibiotics."},
+  {id:"pd_complications", cat:"dialysis", dx:"Peritoneal Dialysis: Complications",
+    stem:"The cloudy bag, plus the mechanical and metabolic pitfalls of PD.",
+    fields:[
+      {l:"PD peritonitis (the big one)", html:`<p><b>Cloudy effluent + abdominal pain.</b> Diagnose with PD fluid cell count (<b>WCC &gt;100 with &gt;50% neutrophils</b>) and culture. <b>Empirical intraperitoneal antibiotics</b> covering Gram-positive and Gram-negative (per ISPD/local protocol) without delay. Catheter removal for refractory (no improvement by ~5 days), relapsing, or <b>fungal</b> peritonitis. Faecal/mixed organisms suggest a surgical source.</p>`},
+      {l:"Catheter & exit-site", html:`<p>Exit-site and tunnel infections (can seed peritonitis). Catheter malfunction with poor drainage: <b>constipation is a common, easily-missed cause</b>, also kinking, migration, fibrin, or omental wrap.</p>`},
+      {l:"Mechanical", html:`<p>Hernias, dialysate leaks (pericatheter, or pleural causing hydrothorax), and problems from raised intra-abdominal pressure.</p>`},
+      {l:"Membrane & metabolic", html:`<p><b>Ultrafiltration failure</b> (membrane change over time). <b>Encapsulating peritoneal sclerosis</b> (rare, serious, with prolonged PD). Metabolic: hyperglycaemia and weight gain from glucose absorption, hypokalaemia.</p>`}
+    ],
+    pearl:"Cloudy bag plus pain is peritonitis until proven otherwise: send the effluent for cell count and culture and start intraperitoneal antibiotics promptly. Do not forget constipation as a cause of poor drainage, and fungal or refractory peritonitis needs the catheter out."},
   {id:"transplant", cat:"transplant", dx:"Kidney Transplant: The Essentials",
     stem:"Immunosuppression, the differential for a rising creatinine, and the infections and cancers that come with it.",
     fields:[
@@ -328,7 +348,214 @@ const CARDS = [
       {l:"Infections by timeline", html:`<p><b>First month:</b> surgical/nosocomial. <b>1 to 6 months:</b> opportunistic (CMV, BK, PJP, fungal), hence valganciclovir and cotrimoxazole prophylaxis. <b>Beyond 6 months:</b> community-acquired plus ongoing opportunistic risk.</p>`},
       {l:"Long-term", html:`<p>Increased malignancy (skin cancers, EBV-related <b>PTLD</b>), cardiovascular disease, and drug interactions raising tacrolimus levels (azoles, macrolides, diltiazem).</p>`}
     ],
-    pearl:"A transplant with a rising creatinine and fever is rejection until proven otherwise, but the biopsy separates rejection from CNI toxicity, BK nephropathy and infection. Never stop immunosuppression without specialist input, and always think CMV and BK in the 1 to 6 month window."}
+    pearl:"A transplant with a rising creatinine and fever is rejection until proven otherwise, but the biopsy separates rejection from CNI toxicity, BK nephropathy and infection. Never stop immunosuppression without specialist input, and always think CMV and BK in the 1 to 6 month window."},
+  {id:"atn", cat:"aki", dx:"Acute Tubular Necrosis",
+    stem:"The commonest intrinsic AKI. Ischaemic or nephrotoxic tubular injury, and mostly a clinical diagnosis.",
+    fields:[
+      {l:"Triggers", html:`<p><b>Ischaemic</b> (prolonged pre-renal insult: hypotension, sepsis, major surgery) or <b>nephrotoxic</b> (aminoglycosides, iodinated contrast, amphotericin, cisplatin; endogenous: myoglobin, haemoglobin, light chains, urate).</p>`},
+      {l:"Presentation", html:`<p>AKI with initiation, maintenance (oliguric or non-oliguric) and recovery/polyuric phases, usually after an identifiable insult.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Urine</span> <b>muddy-brown granular casts</b> and tubular epithelial cells; FeNa &gt;2% (unreliable on diuretics), urine Na &gt;20, isosthenuria. Bland for protein/blood. Diagnosis usually clinical.</p>`},
+      {l:"Management", html:`<p>Supportive: restore perfusion and euvolaemia, stop nephrotoxins, treat the cause, dose-adjust drugs, manage K/acidosis/overload and dialyse per AEIOU. Most recover once the insult is removed.</p>`}
+    ],
+    pearl:"Muddy-brown granular casts and a FeNa above 2% point to ATN over pre-renal. There is no specific drug; treatment is removing the insult and supportive care while the tubules recover. Non-oliguric ATN has the better prognosis."},
+  {id:"ain", cat:"aki", dx:"Acute Interstitial Nephritis",
+    stem:"Drug-induced AKI with an allergic flavour. The urine and the drug chart give it away.",
+    fields:[
+      {l:"Triggers", html:`<p><b>Drugs</b> (most common): antibiotics (penicillins, cephalosporins, sulfonamides, quinolones), NSAIDs, PPIs, allopurinol, diuretics. Also infections and systemic disease (sarcoid, Sjogren, TINU, IgG4).</p>`},
+      {l:"Presentation", html:`<p>AKI days to weeks after starting the drug. The classic triad (fever, rash, eosinophilia) is often incomplete or absent.</p>`},
+      {l:"Investigations", html:`<p><span class="sub">Urine</span> <b>sterile pyuria, white-cell casts</b>, mild proteinuria (heavy if NSAID-associated with coexisting MCD); no dysmorphic RBCs. FBC eosinophilia. Biopsy (interstitial inflammation with eosinophils) if unclear or no recovery.</p>`},
+      {l:"Management", html:`<p><b>Stop the culprit drug</b> (the key step). Corticosteroids if no recovery after withdrawal or severe. Supportive care; treat any systemic cause.</p>`}
+    ],
+    pearl:"Sterile pyuria and white-cell casts with a new drug and no dysmorphic RBCs is AIN, not GN. The whole answer is the drug history and stopping the culprit; the fever-rash-eosinophilia triad is more often absent than present."},
+  {id:"amyloid", cat:"nephrotic", dx:"Renal Amyloidosis",
+    stem:"Nephrotic syndrome plus multi-organ clues. Congo red is the tell.",
+    fields:[
+      {l:"Types", html:`<p><b>AL</b> (light-chain, from a plasma cell clone) and <b>AA</b> (serum amyloid A, from chronic inflammation: rheumatoid arthritis, chronic infection, familial Mediterranean fever). Rarer hereditary forms.</p>`},
+      {l:"Presentation", html:`<p>Heavy nephrotic syndrome with multi-organ involvement: infiltrative cardiomyopathy, <b>macroglossia and periorbital purpura</b> (AL), hepatomegaly, autonomic neuropathy.</p>`},
+      {l:"Investigations", html:`<p>Serum/urine free light chains, SPEP/immunofixation, bone marrow. Tissue biopsy (kidney, or fat pad/marrow) with <b>Congo red apple-green birefringence</b>; <b>type by mass spectrometry</b> (AL vs AA), which is essential. Echo/cardiac MRI.</p>`},
+      {l:"Management", html:`<p><b>Treat the cause:</b> AL, target the plasma cell clone (bortezomib-based, daratumumab); AA, treat the underlying inflammatory disease. Supportive nephrotic care. Cardiac involvement drives prognosis.</p>`}
+    ],
+    pearl:"Macroglossia or periorbital purpura with nephrotic syndrome is amyloid until proven otherwise. Congo red apple-green birefringence confirms it, then you must type it, because AL and AA are treated completely differently."},
+  {id:"paraprotein", cat:"mixed", dx:"Paraprotein Kidney Disease (LCDD, cast nephropathy, MGRS)",
+    stem:"One clone, many renal lesions. Dipstick-negative but lab-positive proteinuria is the clue.",
+    fields:[
+      {l:"Spectrum", html:`<p><b>Cast nephropathy</b> (myeloma kidney): AKI from light-chain casts, in multiple myeloma. <b>LCDD / MIDD</b>: nodular glomerulosclerosis, nephrotic/CKD. <b>AL amyloid</b> (separate card). <b>MGRS</b>: a clone too small to be myeloma but causing kidney disease.</p>`},
+      {l:"Presentation", html:`<p>AKI (cast nephropathy) or proteinuria/nephrotic and progressive CKD (LCDD). Look for the myeloma package: anaemia, hypercalcaemia, bone pain.</p>`},
+      {l:"Investigations", html:`<p><b>Serum free light chains</b> and ratio, SPEP/immunofixation, urine Bence-Jones/UPEP. The tell is <b>dipstick-negative but lab-positive proteinuria</b> (dipstick misses light chains). FBC, calcium, skeletal imaging, marrow. Biopsy with IF for light-chain restriction.</p>`},
+      {l:"Management", html:`<p>Urgent haematology; <b>treat the clone</b> (the light chains are the target). Supportive renal care, hydration, avoid nephrotoxins; cast nephropathy needs rapid clone-directed therapy.</p>`}
+    ],
+    pearl:"A dipstick-protein versus lab-protein mismatch is the paraprotein tell, because the dipstick only sees albumin. In any adult with unexplained AKI or proteinuria, send serum free light chains; missing MGRS is the classic error."},
+  {id:"mpgn", cat:"mixed", dx:"Membranoproliferative GN",
+    stem:"A histological pattern (tram-track), not one disease. It is the start of a workup.",
+    fields:[
+      {l:"Pattern", html:`<p>Mesangial and endocapillary proliferation with <b>double-contour / tram-track</b> basement membranes. Reclassified by IF into <b>immune-complex-mediated</b> (Ig plus complement) and <b>complement-mediated</b> (C3 glomerulopathy, see separate card).</p>`},
+      {l:"Presentation", html:`<p>Nephritic, nephrotic, or mixed, often with low complement.</p>`},
+      {l:"Causes (immune-complex)", html:`<p>Chronic infection (<b>hepatitis C</b> with or without cryoglobulins, hepatitis B, endocarditis, shunt nephritis), autoimmune disease (SLE, Sjogren), and monoclonal gammopathy. Idiopathic is rare after workup.</p>`},
+      {l:"Investigations & Rx", html:`<p>C3/C4, cryoglobulins, hepatitis B/C, ANA, blood cultures, SPEP/free light chains; biopsy IF separates immune-complex from C3-dominant. <b>Treat the underlying driver</b> (antivirals, treat the clone, treat autoimmune disease); supportive CKD bundle.</p>`}
+    ],
+    pearl:"Never accept MPGN as a final diagnosis; it is a prompt to find hepatitis C, cryoglobulins, infection, autoimmune disease, or a paraprotein. In an adult, the miss that hurts is a monoclonal gammopathy."},
+  {id:"tma", cat:"mixed", dx:"Thrombotic Microangiopathy (HUS / TTP / aHUS)",
+    stem:"MAHA plus thrombocytopenia plus organ injury. The mechanism sorts the treatment.",
+    fields:[
+      {l:"Presentation", html:`<p><b>Microangiopathic haemolytic anaemia</b> (schistocytes, high LDH, low haptoglobin) + <b>thrombocytopenia</b> + organ injury. AKI prominent in HUS/aHUS. <b>Coagulation is normal</b> (unlike DIC).</p>`},
+      {l:"Types", html:`<p><b>Typical HUS</b> (Shiga-toxin E. coli O157:H7; children, bloody diarrhoea). <b>Atypical HUS</b> (complement dysregulation). <b>TTP</b> (severe ADAMTS13 deficiency; neurological, adults). <b>Secondary</b> (drugs, malignancy, pregnancy/HELLP, scleroderma renal crisis, transplant).</p>`},
+      {l:"Investigations", html:`<p>Blood film, platelets, LDH, haptoglobin, coagulation, <b>ADAMTS13 activity</b>, Shiga toxin/stool PCR, complement studies, pregnancy test.</p>`},
+      {l:"Management", html:`<p><b>TTP:</b> urgent plasma exchange (+ steroids, caplacizumab). <b>Typical HUS:</b> supportive, avoid antibiotics/anti-motility agents. <b>aHUS:</b> eculizumab. Treat secondary causes.</p>`}
+    ],
+    pearl:"MAHA + thrombocytopenia + AKI is a TMA; the discriminator is ADAMTS13 (severely low in TTP). TTP needs urgent plasma exchange, typical HUS is supportive with no antibiotics, and aHUS needs eculizumab. Normal coagulation separates it from DIC."},
+  {id:"hrs", cat:"aki", dx:"Hepatorenal Syndrome",
+    stem:"AKI in advanced cirrhosis, a diagnosis of exclusion driven by splanchnic vasodilation.",
+    fields:[
+      {l:"Mechanism", html:`<p>Advanced cirrhosis with portal hypertension and ascites; splanchnic vasodilation reduces effective circulating volume, causing intense renal vasoconstriction and rapidly progressive AKI.</p>`},
+      {l:"Diagnosis (exclusion)", html:`<p>Cirrhosis with ascites and AKI, <b>no response to albumin volume expansion and diuretic withdrawal</b>, no shock, no nephrotoxins, and no structural kidney disease (bland urine, minimal protein/blood, normal ultrasound).</p>`},
+      {l:"Investigations", html:`<p>Urinalysis (bland), urine Na (low), renal ultrasound, <b>ascitic tap to exclude SBP</b> (a common trigger), stop diuretics/nephrotoxins, albumin challenge.</p>`},
+      {l:"Management", html:`<p><b>Vasoconstrictors (terlipressin, or noradrenaline in ICU) plus IV albumin</b>; treat precipitants (SBP, bleeding). Definitive treatment is <b>liver transplantation</b>; TIPS in selected cases.</p>`}
+    ],
+    pearl:"Hepatorenal syndrome is a diagnosis of exclusion: volume-expand with albumin and rule out other causes first. Treatment is terlipressin plus albumin, and the cure is a liver transplant. Always tap the ascites to exclude SBP as the trigger."},
+  {id:"tls", cat:"lytes", dx:"Tumour Lysis Syndrome",
+    stem:"A metabolic emergency after treating a bulky, chemo-sensitive tumour. Prevent it.",
+    fields:[
+      {l:"Trigger", html:`<p>Massive tumour-cell lysis (often after chemotherapy for high-grade lymphoma/leukaemia or bulky disease) releases intracellular contents.</p>`},
+      {l:"Biochemistry", html:`<p><b>Hyperkalaemia, hyperphosphataemia, hyperuricaemia</b>, and secondary <b>hypocalcaemia</b>. AKI from urate and calcium-phosphate crystal deposition.</p>`},
+      {l:"Investigations", html:`<p>Potassium, phosphate, calcium, urate, creatinine, ECG; identify at-risk patients before treatment.</p>`},
+      {l:"Management", html:`<p><b>Prevention is key:</b> IV hydration and <b>rasburicase</b> (high risk) or <b>allopurinol</b> (lower risk). Treat hyperkalaemia (protect-shift-remove), manage phosphate; treat symptomatic hypocalcaemia only. Dialysis for refractory derangement or AKI.</p>`}
+    ],
+    pearl:"Tumour lysis is best prevented: hydrate and give rasburicase or allopurinol before chemotherapy in at-risk patients. The killer is hyperkalaemia. Do not correct asymptomatic hypocalcaemia, because giving calcium worsens calcium-phosphate deposition."},
+  {id:"contrast", cat:"aki", dx:"Contrast-Associated AKI",
+    stem:"AKI after iodinated contrast. Hydration is the main prevention, and the risk is often overstated.",
+    fields:[
+      {l:"Definition & risk", html:`<p>AKI within 48 to 72 hours of iodinated contrast, after excluding other causes. Risk: pre-existing CKD (especially with diabetes), volume depletion, high contrast volume, nephrotoxins. Causal risk is <b>lower than historically believed</b>, especially at higher eGFR.</p>`},
+      {l:"Presentation", html:`<p>Usually mild and non-oliguric; creatinine peaks at 3 to 5 days and recovers.</p>`},
+      {l:"Prevention & management", html:`<p><b>IV isotonic sodium chloride</b> peri-procedure in at-risk patients, lowest necessary contrast volume, withhold nephrotoxins, and <b>do not withhold a clinically necessary scan</b> for modest CKD. <b>N-acetylcysteine is not recommended</b> (ineffective).</p>`}
+    ],
+    pearl:"Hydration is the evidence-based prevention; N-acetylcysteine and bicarbonate are not. Do not deny a genuinely indicated contrast study over borderline renal function, because the risk is smaller than the old teaching suggested."},
+  {id:"adpkd", cat:"mixed", dx:"Autosomal Dominant Polycystic Kidney Disease",
+    stem:"The commonest inherited kidney disease. Family history, big cystic kidneys, and extrarenal features.",
+    fields:[
+      {l:"Genetics & presentation", html:`<p>Autosomal dominant, <b>PKD1</b> (earlier ESKD) or <b>PKD2</b>. Progressive bilateral renal cysts, early hypertension, flank pain, haematuria, cyst infection, stones, and progressive CKD.</p>`},
+      {l:"Extrarenal", html:`<p>Hepatic cysts, <b>intracranial aneurysms</b> (screen if family history of aneurysm/SAH), cardiac valve disease, diverticular disease, hernias.</p>`},
+      {l:"Investigations", html:`<p>Ultrasound (age-adjusted cyst criteria) or MRI (total kidney volume for prognosis); genetic testing in select cases; family history and BP monitoring.</p>`},
+      {l:"Management", html:`<p>BP control (RAS blockade), high fluid intake, treat complications. <b>Tolvaptan</b> (V2 antagonist) slows rapidly-progressing disease; PBS-listed in Australia for eligible patients (confirm eGFR and rapid-progression criteria; needs LFT monitoring). Manage cardiovascular risk; screen for aneurysm where indicated.</p>`}
+    ],
+    pearl:"Big palpable kidneys with a family history is ADPKD; check the BP (it rises early) and ask about a family history of brain aneurysm. Tolvaptan slows rapidly-progressing disease but needs the right eligibility and liver-function monitoring."},
+  {id:"b_bbn", cat:"behav", dx:"Breaking Bad News",
+    stem:"A structured, empathic conversation. SPIKES is your scaffold.",
+    fields:[
+      {l:"Principles", html:`<p>Honesty with empathy, at the patient's pace, checking understanding, and respecting how much they want to know. Warn before the news.</p>`},
+      {l:"Practical approach (SPIKES)", html:`<p><b>S</b>etting (private, uninterrupted, support person), <b>P</b>erception (what they understand), <b>I</b>nvitation (how much they want to know), <b>K</b>nowledge (small chunks, plain language, warning shot), <b>E</b>motions (acknowledge, allow silence), <b>S</b>trategy/summary (plan, written info, follow-up).</p>`},
+      {l:"QLD resources", html:`<p>Palliative care and social work, interpreter services, Aboriginal and Torres Strait Islander Health Workers for cultural safety, advance care planning where relevant.</p>`}
+    ],
+    pearl:"Fire a warning shot, then deliver the news in small chunks and stop talking to let the emotion land. The most common failure is talking too much and not responding to the person in front of you."},
+  {id:"b_eol", cat:"behav", dx:"Goals of Care & End-of-Life",
+    stem:"Recognising the ceiling of treatment, and centring the patient's values.",
+    fields:[
+      {l:"Principles", html:`<p>Values-based goals of care; benefit versus burden of treatment; a competent patient's autonomy; doing less can be the right care. Involve family with the patient's consent.</p>`},
+      {l:"Practical approach", html:`<p>Assess prognosis and reversibility; establish the patient's wishes (<b>see them alone if family dominates</b>); agree goals of care; document a resuscitation plan; control symptoms; refer to palliative care; advance care planning if capacity allows.</p>`},
+      {l:"QLD resources", html:`<p>Palliative care service, Statewide Office of Advance Care Planning, Advance Health Directive and Acute Resuscitation Plan (ARP), social work, pastoral care, and the substitute decision-making pathway if capacity is impaired.</p>`}
+    ],
+    pearl:"If a loving family is speaking over the patient, your job is to hear the patient's own voice, so see them alone. While they have capacity, they decide, not the family. Frame withdrawal as a change of goals toward comfort, not giving up."},
+  {id:"b_capacity", cat:"behav", dx:"Capacity, Consent & Substitute Decisions (QLD)",
+    stem:"Who decides when a patient cannot? Know the Queensland hierarchy.",
+    fields:[
+      {l:"Principles", html:`<p>Capacity is <b>presumed and decision-specific</b> (understand, retain, weigh, communicate). A competent adult may consent to or refuse any treatment, even unwisely. If capacity is impaired, a substitute decision-maker decides, applying the general and health care principles.</p>`},
+      {l:"QLD hierarchy (impaired capacity)", html:`<p><b>1.</b> Advance Health Directive. <b>2.</b> Guardian appointed by QCAT. <b>3.</b> Attorney under an Enduring Power of Attorney or AHD. <b>4.</b> Statutory Health Attorney (first available, culturally appropriate adult: spouse/de facto, then unpaid carer, then close friend or relative). <b>5.</b> Public Guardian if none.</p>`},
+      {l:"Practical approach", html:`<p>Confirm capacity for the specific decision; if intact, the patient decides. If impaired, work down the hierarchy. Urgent life-saving treatment can proceed under the emergency provision. Document the assessment and the decision-maker.</p>`},
+      {l:"QLD resources", html:`<p>Office of the Public Guardian (health care consent line), QCAT, Statewide Office of Advance Care Planning, The Viewer (ACP Tracker), and medico-legal/ethics support.</p>`}
+    ],
+    pearl:"The trap is letting a dominant family member decide while the patient still has capacity. Capacity is decision-specific, and if intact the patient is the decision-maker. Memorise the order: AHD, QCAT guardian, EPOA attorney, statutory health attorney, Public Guardian."},
+  {id:"b_refuse", cat:"behav", dx:"Patient Refusing Treatment",
+    stem:"A competent adult can refuse. The skill is understanding why and keeping the door open.",
+    fields:[
+      {l:"Principles", html:`<p>A competent adult may refuse even life-saving treatment (e.g. a Jehovah's Witness refusing blood). Coercion is never appropriate. Assess capacity, explore reasons, inform, and respect the informed refusal.</p>`},
+      {l:"Practical approach", html:`<p>Confirm capacity; explore the reason without judgement; address specific concerns with clear information; involve family/supports with consent; <b>document the informed refusal</b> and that risks were explained; keep the door open; offer alternatives.</p>`},
+      {l:"QLD resources", html:`<p>Interpreter services, Aboriginal and Torres Strait Islander Health Workers, patient advocates, ethics/medico-legal advice, and an Advance Health Directive to record future wishes.</p>`}
+    ],
+    pearl:"Refusal by a capable adult is their right, so the job is not to change their mind but to make sure it is informed. Document capacity, the information given, and the refusal, and leave the door open."},
+  {id:"b_educ", cat:"behav", dx:"Health Misunderstanding & Education",
+    stem:"Behind a 'non-compliant' patient is often a fixable misunderstanding.",
+    fields:[
+      {l:"Principles", html:`<p>Health literacy and trust drive adherence more than instruction. Explore the belief behind the behaviour before correcting it. Meet the person where they are, without judgement.</p>`},
+      {l:"Practical approach", html:`<p>Ask what they understand and believe; identify the specific misunderstanding; correct it in plain language with <b>teach-back</b>; address the underlying fear or mistrust; use culturally appropriate supports; follow up.</p>`},
+      {l:"QLD resources", html:`<p>Interpreter services, Aboriginal and Torres Strait Islander Health Workers and Liaison Officers, health education materials, community/outreach services, and renal and diabetes educators.</p>`}
+    ],
+    pearl:"Ask what they believe before you explain, because you cannot fix a misunderstanding you have not surfaced. Use teach-back to confirm they actually understood, not just nodded."},
+  {id:"b_indig", cat:"behav", dx:"Indigenous Health & Cultural Safety",
+    stem:"Culturally safe care, delivered with humility and the right supports.",
+    fields:[
+      {l:"Principles", html:`<p><b>Cultural safety is defined by the patient</b>, not the clinician. Acknowledge well-founded historical mistrust. Practise cultural humility, build rapport, avoid assumptions, and address access and social determinants.</p>`},
+      {l:"Practical approach", html:`<p>Involve <b>Aboriginal and Torres Strait Islander Health Workers and Liaison Officers</b> early; ask permission and build trust; allow time; respect family and community roles; coordinate with community-controlled health services; consider the whole journey (travel, dialysis away from country).</p>`},
+      {l:"QLD resources", html:`<p>Aboriginal and Torres Strait Islander Health Workers/Practitioners and Hospital Liaison Officers, community-controlled health organisations, the QLD Health cultural capability framework, interpreters, and social work.</p>`}
+    ],
+    pearl:"Involve an Aboriginal and Torres Strait Islander Health Worker early and let the patient define what is culturally safe. Distrust is often well-founded, so trust is earned with time and humility, not assumed."},
+  {id:"b_violent", cat:"behav", dx:"Aggressive / Violent Patient",
+    stem:"Staff safety first, least-restrictive approach, and the occupational violence framework.",
+    fields:[
+      {l:"Principles", html:`<p>Staff and patient safety are paramount. <b>Least-restrictive approach; de-escalate before restraint.</b> Look for and treat medical causes of agitation (hypoxia, hypoglycaemia, delirium, intoxication, withdrawal). Zero tolerance, but consider clinical drivers.</p>`},
+      {l:"Practical approach", html:`<p>Ensure safety (call for help, <b>Code Black</b>, security/police); de-escalate; treat reversible causes; pharmacological management if needed <b>with monitoring</b> (airway, obs); debrief and thank staff; check their welfare; incident report; behavioural agreement for recurrent issues.</p>`},
+      {l:"QLD resources", html:`<p>Occupational Violence Prevention strategy and Unacceptable Behaviour Framework, Code Black, security, incident reporting (RiskMan), Employee Assistance Program, and acute-behavioural-disturbance guidelines.</p>`}
+    ],
+    pearl:"Always look for a treatable medical cause of agitation before labelling it behavioural. Lead with de-escalation and the least-restrictive option, and afterwards debrief and check on your staff. Know the correct sedation for acute behavioural disturbance."},
+  {id:"b_sexharass", cat:"behav", dx:"Sexual Harassment or Assault",
+    stem:"Believe, support, and act. Zero tolerance whoever the source is, victim-centred.",
+    fields:[
+      {l:"Principles", html:`<p>Zero tolerance whether the source is a <b>patient or a colleague</b>. Victim-centred and trauma-informed: listen, believe, support, and respect their autonomy over next steps. QLD Health has a positive duty, and there must be <b>no victimisation for reporting</b>.</p>`},
+      {l:"If a patient is the perpetrator", html:`<p>Ensure immediate safety and remove them from the situation; manage the patient via the <b>occupational violence / unacceptable behaviour pathway</b> (behavioural safeguards) while continuing necessary care; incident report; support the person.</p>`},
+      {l:"If a colleague is the perpetrator", html:`<p>This is <b>workplace sexual harassment or assault</b>. Support the person and follow their lead; report to the line manager and HR under <b>Policy E5</b>; be alert to a <b>power imbalance</b> if the perpetrator is senior. It is a Code of Conduct / misconduct matter, and because the perpetrator is a registered practitioner it may also raise an <b>AHPRA professional-conduct concern</b>.</p>`},
+      {l:"If it is assault (either source)", html:`<p>Offer the <b>police</b> and sexual assault service options, preserve evidence, and support their choice rather than directing it.</p>`},
+      {l:"QLD resources", html:`<p>HR Policy E5, WHS psychosocial duties, Occupational Violence Prevention, Employee Assistance Program, incident reporting, sexual assault services, police, the Code of Conduct, and AHPRA for practitioner conduct.</p>`}
+    ],
+    pearl:"Lead with the person and follow their lead on reporting. Match the pathway to the source: occupational violence for a patient, HR under Policy E5 for a colleague (mind the power imbalance if they are senior), and police for any assault."},
+  {id:"b_bully", cat:"behav", dx:"Bullying & Harassment (staff or patient)",
+    stem:"Repeated, unreasonable behaviour that creates a risk to health. Match the pathway to the source.",
+    fields:[
+      {l:"What counts", html:`<p><b>Repeated and unreasonable behaviour</b> directed at a worker that creates a risk to health and safety. It is <b>not</b> reasonable management action (fair performance management), a single incident, or a difference of opinion. Sexual harassment and discrimination run on their own pathways. A WHS psychosocial hazard.</p>`},
+      {l:"LISTEN (scaffold for any interpersonal issue)", html:`<p><b>L</b>isten and thank them for telling you. <b>I</b>mmediate safety, is anyone at risk? <b>S</b>eek details objectively. <b>T</b>alk through options. <b>E</b>scalate appropriately. <b>N</b>ext steps and follow-up.</p><p>Works for bullying, harassment, discrimination, wellbeing concerns, and many patient complaints.</p>`},
+      {l:"If a colleague is the source", html:`<p>Early or informal resolution where safe; escalate to your <b>supervisor or HR</b>; document; no retaliation. Formal options: the <b>QIRC application to stop bullying (Form 82)</b> for public-sector staff, WorkSafe Qld, and grievance processes. Offer EAP.</p>`},
+      {l:"If a patient is the source", html:`<p>Manage via the <b>occupational violence / unacceptable behaviour framework</b> (de-escalation, behavioural agreements, safeguards) while continuing necessary care; incident report. <b>Physical assault or threats go to police.</b></p>`},
+      {l:"QLD resources", html:`<p>HR Policy E13 (QH-POL-266, workplace harassment) and the Code of Conduct, Occupational Violence Prevention framework, QIRC (Form 82), WorkSafe Qld, Employee Assistance Program, and incident reporting (RiskMan).</p>`}
+    ],
+    pearl:"The test is repeated, unreasonable, and a risk to health; reasonable management action is not bullying. Match the pathway to the source: HR or QIRC for a colleague, the occupational violence framework for a patient, and police for any assault or threat."},
+  {id:"b_junior", cat:"behav", dx:"Underperforming Junior",
+    stem:"Curiosity before judgement, clear expectations with support, escalate appropriately.",
+    fields:[
+      {l:"Principles", html:`<p>Patient safety first. <b>Distinguish performance from a health or wellbeing issue.</b> Address it early, privately and supportively; specific, constructive feedback; a chance to improve with support.</p>`},
+      {l:"Practical approach", html:`<p>Ensure patients are safe now; establish facts (not hearsay); meet privately and explore whether something is going on; set clear expectations; offer help and a remediation plan; escalate to the term supervisor/DPET and document if it continues; support the person and the team.</p>`},
+      {l:"QLD resources", html:`<p>Term supervisor and Director of Clinical/Physician Training (DPET), performance management pathways, Employee Assistance Program, medical education unit, and wellbeing supports.</p>`}
+    ],
+    pearl:"Ask what is going on before assuming laziness, because burnout or a health issue often underlies it. Underperformance is local performance management first; it only becomes an AHPRA notification if it meets the mandatory threshold."},
+  {id:"b_senior", cat:"behav", dx:"Underperforming / Impaired Senior",
+    stem:"Harder to raise, but patient safety and the mandatory reporting thresholds still apply.",
+    fields:[
+      {l:"Principles", html:`<p>Patient safety overrides hierarchy. Raise concerns respectfully, assume good faith, and consider health or impairment. Know the AHPRA mandatory notification thresholds.</p>`},
+      {l:"Practical approach", html:`<p>If patients are at immediate risk, act and escalate now. Raise concerns through the right channels (your supervisor, the unit director, DPET, or director of medical services). Document objectively. If you form a <b>reasonable belief of notifiable conduct</b>, make a mandatory notification.</p>`},
+      {l:"AHPRA thresholds", html:`<p>Four notifiable types: <b>impairment, intoxication while practising, significant departure from accepted professional standards, sexual misconduct.</b> Impairment/departure also require risk of harm to the public; intoxication and sexual misconduct may be notifiable regardless. Good-faith notifications are protected.</p>`}
+    ],
+    pearl:"Patient safety trumps seniority. Escalate through proper channels and document; make a mandatory AHPRA notification only if you hold a reasonable belief of notifiable conduct (impairment, intoxication, significant departure, or sexual misconduct)."},
+  {id:"b_ahpra", cat:"behav", dx:"AHPRA Mandatory Notifications",
+    stem:"When you must notify the regulator about a practitioner, and the deliberately high bar for it.",
+    fields:[
+      {l:"Who, and the trigger", html:`<p>Registered health practitioners, employers and education providers must notify. The trigger is forming a <b>reasonable belief</b> of notifiable conduct. Good-faith notifications are protected from liability.</p>`},
+      {l:"The four notifiable types", html:`<p><b>1. Impairment</b> (a health issue detrimentally affecting the capacity to practise safely). <b>2. Intoxication</b> by alcohol or drugs while practising. <b>3. A significant departure</b> from accepted professional standards. <b>4. Sexual misconduct</b> in connection with practice.</p>`},
+      {l:"The threshold", html:`<p><b>Impairment and departure</b> are notifiable only when they place the <b>public at risk of harm</b>; for a <b>treating practitioner</b> (treating a colleague as a patient) the bar is higher, a <b>substantial risk of harm</b>. <b>Intoxication and sexual misconduct</b> may be notifiable regardless of the level of risk.</p>`},
+      {l:"What it is NOT", html:`<p>A well-managed health condition is not an impairment. General underperformance, isolated minor errors, and matters handled by local performance processes usually do not meet the bar. Consider a <b>voluntary</b> notification where the mandatory threshold is not met but a concern remains.</p>`}
+    ],
+    pearl:"Do not reflex-report; the bar is high. A mandatory notification needs a reasonable belief of one of the four types, and for impairment or a standards departure it must place the public at (substantial) risk. Everything else is local performance management first."},
+  {id:"b_confid", cat:"behav", dx:"Confidentiality & Family Requests",
+    stem:"The relative in the waiting room wants an update. What can you share?",
+    fields:[
+      {l:"Principles", html:`<p>Patient confidentiality is the default. A competent adult controls who receives their health information. Share with family <b>only with the patient's consent</b> (or, if capacity is impaired, via the substitute decision-maker and in the patient's interests).</p>`},
+      {l:"Practical approach", html:`<p>Check the patient's wishes and any documented consent about who can be told; do not disclose without it. You <b>can</b> listen to a family member's concerns and provide general support without breaching confidentiality; if capacity is impaired, involve the substitute decision-maker; document. Balance confidentiality against any genuine safety concern.</p>`},
+      {l:"QLD resources", html:`<p>Health Services Act confidentiality provisions and privacy legislation, the substitute decision-making pathway, social work, patient liaison, and medico-legal advice.</p>`}
+    ],
+    pearl:"Do not disclose to a family member without the competent patient's consent, however distressed the relative. You can still hear their concerns and support them; you just cannot share the patient's information without permission."},
+  {id:"b_conflict", cat:"behav", dx:"Disagreement with a Senior",
+    stem:"Speaking up safely when you disagree with someone above you.",
+    fields:[
+      {l:"Principles", html:`<p>Patient safety and respectful, clear communication. Disagree without damaging the relationship; frame around the shared goal (the patient); escalate if unresolved and safety is at stake.</p>`},
+      {l:"Practical approach", html:`<p>Raise it privately and early with <b>graded assertiveness</b> (state the concern, the reason, the shared goal; ISBAR plus "I'm concerned..."). Seek to understand their reasoning. If unresolved and the patient is at risk, <b>escalate up the chain</b> (senior on call, consultant, medical administration). Document. Repair the relationship afterwards.</p>`},
+      {l:"QLD resources", html:`<p>ISBAR communication, chain-of-command/escalation policy, clinical governance and patient safety pathways, and speaking-up-for-safety programs.</p>`}
+    ],
+    pearl:"Frame the disagreement around the patient, not the person, and use graded assertiveness. If it is a genuine safety issue and stays unresolved, escalating up the chain is the professional thing to do, not a betrayal."}
 ];
 
 const VIGNETTES = [
@@ -595,7 +822,103 @@ const VIGNETTES = [
       {l:"Investigations", html:`<p><span class="sub">Urine</span> microscopy: dysmorphic RBCs/casts suggest a proliferative or lupus picture; bland suggests MCD/FSGS/membranous.</p><p><span class="sub">Bloods</span> C3/C4, ANA, anti-dsDNA and ENA, anti-PLA2R, hepatitis B/C, HIV, lipids, coagulation profile.</p><p><span class="sub">Definitive</span> kidney biopsy names the lesion and, if lupus, gives the ISN/RPS class.</p>`},
       {l:"Management pointer", html:`<p>Supportive while awaiting histology: salt restriction, diuretics, RAS blockade, statin, and address the <b>high VTE risk</b> (albumin 18 is strongly prothrombotic). Disease-specific therapy follows the biopsy.</p>`}
     ],
-    pearl:"Young woman plus nephrotic syndrome means exclude lupus, and biopsy is essential. Do not forget the thromboembolic risk: with an albumin this low, VTE prophylaxis is a live consideration."}
+    pearl:"Young woman plus nephrotic syndrome means exclude lupus, and biopsy is essential. Do not forget the thromboembolic risk: with an albumin this low, VTE prophylaxis is a live consideration."},
+  {id:"bv1", cat:"behav",
+    stem:"Behavioural (STAR) · Patient Focus. Full self-driven answer, no probes.",
+    q:"Tell us about a time you advocated for a patient whose best interests or wishes conflicted with what others wanted.",
+    fields:[
+      {l:"What to cover", html:`<p>Situation and your role as registrar; that you <b>established the patient's own wishes</b> (saw them alone if family dominated); capacity, and if impaired the <b>QLD substitute decision-making hierarchy</b>; who you involved (consultant, palliative care, social work); the outcome; and an honest reflection on autonomy versus family and 'doing less'.</p>`},
+      {l:"Loop in a story", html:`<p>Your <b>scleroderma</b> patient. Message: recognising the ceiling of dialysis and protecting the patient's own voice.</p>`}
+    ],
+    pearl:"Volunteer the capacity point and that you saw her alone, because no one will ask; that is what earns the Patient Focus marks."},
+  {id:"bv2", cat:"behav",
+    stem:"Behavioural (STAR) · Communication. Name your structure (SPIKES) as you go.",
+    q:"Tell us about a time you had a difficult conversation with a patient or family, such as breaking bad news or discussing a poor prognosis.",
+    fields:[
+      {l:"What to cover", html:`<p>Setting up the conversation, checking understanding, delivering in small chunks with a <b>warning shot</b>, responding to emotion, involving family with consent, and the plan and follow-up. Reflection on what you learned.</p>`},
+      {l:"Loop in a story", html:`<p>Scleroderma (goals of care), or the palliative RCC patient if you can define your action in it. Message: honesty with empathy, at the patient's pace.</p>`}
+    ],
+    pearl:"Say you fired a warning shot and then stopped talking to let the emotion land; the classic failure is talking too much."},
+  {id:"bv3", cat:"behav",
+    stem:"Behavioural (STAR) · Staff Supervision. Full self-driven answer.",
+    q:"Tell us about a time you managed a colleague who was underperforming or not meeting expectations.",
+    fields:[
+      {l:"What to cover", html:`<p>Patient safety first; checking whether something was going on for them (<b>performance versus wellbeing</b>); clear expectations delivered privately and supportively; an offer of help or remediation; when you would escalate to a supervisor and document; the outcome and reflection.</p>`},
+      {l:"Loop in a story", html:`<p>Your <b>Mayo research colleague</b> (lateness, missed training, AI-generated work). Message: curiosity before judgement, clear expectations with support.</p>`}
+    ],
+    pearl:"Drop the line, unprompted, that this is local performance management and does not meet the AHPRA threshold; it proves you know the policy without being asked."},
+  {id:"bv4", cat:"behav",
+    stem:"Situational · Patient Focus. Answer the scenario, then loop a one-minute anecdote.",
+    q:"An Aboriginal man on haemodialysis declines the influenza vaccine, against unit policy. How would you approach this?",
+    fields:[
+      {l:"What to cover", html:`<p>Respect autonomy (a competent adult may refuse); explore the reason without judgement; culturally safe information; involve an <b>Aboriginal and Torres Strait Islander Health Worker</b>; document the informed refusal; keep the door open; protect the relationship.</p>`},
+      {l:"Loop in a story", html:`<p>Then: "This reminds me of..." your <b>Cherbourg COVID-vaccine-distrust</b> patients. Message: understanding the fear behind a refusal builds trust.</p>`}
+    ],
+    pearl:"Answer the scenario in full first; the anecdote is a one-minute garnish that shows you have lived it, not the main course."},
+  {id:"bv5", cat:"behav",
+    stem:"Behavioural (STAR) · Communication. Full self-driven answer.",
+    q:"Tell us about a time you disagreed with a senior colleague and how you handled it.",
+    fields:[
+      {l:"What to cover", html:`<p>The specific concern; raising it privately and early with <b>graded assertiveness</b>, framed around the patient; seeking their reasoning; escalating up the chain if unresolved and safety was at stake; the outcome; and repairing the relationship.</p>`},
+      {l:"Loop in a story", html:`<p>You flagged you do not have a clean one here yet. Worth mining a real example before the interview. Theme: respectful challenge for patient safety.</p>`}
+    ],
+    pearl:"Frame it around the patient, not the person, and use graded assertiveness; escalating a genuine safety issue is professional, not disloyal."},
+  {id:"bv6", cat:"behav",
+    stem:"Behavioural (STAR) · Staff Supervision & safety. The reflection is the strength here.",
+    q:"Tell us about a time you managed an aggressive or violent patient and kept staff safe.",
+    fields:[
+      {l:"What to cover", html:`<p>Immediate safety and calling for help; <b>de-escalation and the least-restrictive approach</b>; looking for a treatable medical cause; safe pharmacological management with monitoring; debriefing and checking on staff; incident report; and an honest reflection.</p>`},
+      {l:"Loop in a story", html:`<p>Your <b>Cherbourg restraint</b> case. Message: safety first, and I actively seek and act on feedback. Frame the patient as an adult, and be ready to state the correct sedation.</p>`}
+    ],
+    pearl:"The sedative feedback that stuck with you is the strength, but you must know the correct management of acute behavioural disturbance, or you open a gap you can't close."},
+  {id:"bv7", cat:"behav",
+    stem:"Behavioural (STAR) · Communication / Patient Focus. Use the LISTEN scaffold.",
+    q:"Tell us about a time a patient or family was unhappy with their care, and how you handled it.",
+    fields:[
+      {l:"What to cover", html:`<p>Staying calm; listening to the concern from their point of view; taking responsibility where due; resolving it; and protecting the therapeutic relationship. Run <b>LISTEN</b> (listen and thank, immediate safety, seek details, talk through options, escalate, next steps). Reflection.</p>`},
+      {l:"Loop in a story", html:`<p>The scleroderma husband could serve here (a distressed family member). Theme: hearing the concern behind the anger.</p>`}
+    ],
+    pearl:"Separate the emotion from the complaint; people calm down when they feel heard. LISTEN keeps you structured."},
+  {id:"bv8", cat:"behav",
+    stem:"Behavioural (STAR) · Staff Supervision. Full self-driven answer.",
+    q:"Tell us about a time you taught or supervised a junior colleague.",
+    fields:[
+      {l:"What to cover", html:`<p>Judging what they needed; pitching the teaching; setting expectations; giving feedback; <b>checking they were coping and safe</b>; and the outcome for them and the patient.</p>`},
+      {l:"Loop in a story", html:`<p>Any teaching moment from RBWH or Mayo. Theme: developing others while keeping patients safe.</p>`}
+    ],
+    pearl:"Show you checked they were safe and coping, not just that you taught something; supervision is safety plus development."},
+  {id:"bv9", cat:"behav",
+    stem:"Situational · Patient Focus. Answer the scenario, then loop a one-minute anecdote.",
+    q:"A dialysis patient refuses to eat lunch because they believe it stops the dialysis working. How do you approach it?",
+    fields:[
+      {l:"What to cover", html:`<p>Explore the belief without judgement; correct the misunderstanding in plain language with <b>teach-back</b>; address the underlying concern; involve the dietitian or renal educator; follow up.</p>`},
+      {l:"Loop in a story", html:`<p>Loop to your <b>Cherbourg vaccine-distrust</b> patients under the same theme: correcting a misunderstanding with respect. (This is Matt's cross-mapping in action.)</p>`}
+    ],
+    pearl:"Ask what they believe before you explain; you cannot fix a misunderstanding you have not surfaced. Teach-back confirms it landed."},
+  {id:"bv10", cat:"behav",
+    stem:"Situational · Communication / Patient Focus. Work through it, then reflect.",
+    q:"A young competent patient is off the ward for a procedure and asked for confidentiality. Their distressed mother is in the waiting room demanding to know what is going on. How do you handle it?",
+    fields:[
+      {l:"What to cover", html:`<p>Confidentiality is the default; a competent adult controls who is told; you <b>cannot disclose without consent</b>. But you can hear the mother's concerns and support her; check the patient's documented wishes; if capacity were impaired, the substitute decision-maker; document; balance with any genuine safety concern.</p>`},
+      {l:"Loop in a story", html:`<p>Optional. Theme: protecting confidentiality while showing compassion to family.</p>`}
+    ],
+    pearl:"You can support the mother without breaching confidentiality; empathy and disclosure are different things."},
+  {id:"bv11", cat:"behav",
+    stem:"Situational · Staff Supervision & safety. Run LISTEN, then reflect. No personal story needed.",
+    q:"A hesitant intern comes to you privately to disclose that a patient has sexually harassed them. What do you do?",
+    fields:[
+      {l:"What to cover", html:`<p>Listen and believe; immediate safety (take them off that patient if possible); ask what support they want; support reporting (incident report, supervisor, HR under <b>Policy E5</b>); offer EAP; manage the patient via the occupational violence pathway; follow up. If it is assault, offer police and sexual assault services on their terms.</p>`},
+      {l:"Loop in a story", html:`<p>You do not have a personal one, and you do not need one. Answer it cleanly as situational using LISTEN.</p>`}
+    ],
+    pearl:"Lead with the person and follow their lead on reporting; do not take over. LISTEN fits this perfectly."},
+  {id:"bv12", cat:"behav",
+    stem:"Behavioural (STAR) · Reflection. Honesty scores here.",
+    q:"Tell us about a time you made a mistake, or a decision you would make differently now.",
+    fields:[
+      {l:"What to cover", html:`<p>The situation, your action, and the outcome, then specifically <b>what you learned and changed</b>. Own it without excessive self-flagellation; show insight and a system fix if relevant.</p>`},
+      {l:"Loop in a story", html:`<p>Your <b>Cherbourg restraint / sedative feedback</b> story fits well. Theme: seeking and acting on feedback.</p>`}
+    ],
+    pearl:"Panels reward honesty and insight; a real, owned mistake with a clear lesson beats a humblebrag."}
 ];
 
 const QUIZ = [
@@ -685,7 +1008,7 @@ const QUIZ = [
   {id:"q84", cat:"transplant", topic:"Kidney transplant", q:"Name key long-term risks after transplant.", a:"Malignancy (skin cancers, EBV-related post-transplant lymphoproliferative disorder), cardiovascular disease, and drug interactions raising tacrolimus levels (azoles, macrolides, diltiazem)."}
 ];
 
-const CAT_NAME = {nephritic:"Nephritic pattern", nephrotic:"Nephrotic pattern", mixed:"Mixed / variable", aki:"Acute kidney injury", lytes:"Fluid & electrolytes", mbd:"CKD-MBD", dialysis:"Dialysis", transplant:"Transplant"};
+const CAT_NAME = {nephritic:"Nephritic pattern", nephrotic:"Nephrotic pattern", mixed:"Mixed / variable", aki:"Acute kidney injury", lytes:"Fluid & electrolytes", mbd:"CKD-MBD", dialysis:"Dialysis", transplant:"Transplant", behav:"Behavioural"};
 const STORE_KEY = "gn_flashcards_issy_v2";
 
 let mode = "cards";
