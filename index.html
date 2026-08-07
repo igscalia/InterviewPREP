@@ -129,7 +129,7 @@
     <div class="chip filt mixed" data-filt="mixed">Mixed</div>
     <div class="chip filt aki" data-filt="aki">AKI</div>
     <div class="chip filt lytes" data-filt="lytes">Fluid/Lytes</div>
-    <div class="chip filt mbd" data-filt="mbd">CKD-MBD</div>
+    <div class="chip filt mbd" data-filt="mbd">CKD</div>
     <div class="chip filt dialysis" data-filt="dialysis">Dialysis</div>
     <div class="chip filt transplant" data-filt="transplant">Transplant</div>
     <div class="chip filt behav" data-filt="behav">Behavioural</div>
@@ -310,9 +310,36 @@ const CARDS = [
     fields:[
       {l:"Pathophysiology", html:`<p>Falling GFR &rarr; phosphate retention and reduced 1,25-vitamin D &rarr; hypocalcaemia and rising FGF23 &rarr; <b>secondary hyperparathyroidism</b>. Chronic drive can become <b>tertiary (autonomous)</b>. Consequences: renal osteodystrophy and vascular calcification.</p>`},
       {l:"Investigations", html:`<p>Calcium, phosphate, <b>PTH</b>, 25-OH vitamin D, alkaline phosphatase, followed as <b>trends</b>. Imaging for vascular calcification if relevant; bone biopsy rarely.</p>`},
-      {l:"Management (KDIGO)", html:`<p>Lower high phosphate toward normal (dietary restriction, <b>phosphate binders</b>: calcium-based cautiously, or non-calcium sevelamer/lanthanum). Correct vitamin D deficiency. Control PTH with <b>activated vitamin D</b> (calcitriol) and <b>calcimimetics</b> (cinacalcet, especially in dialysis). Avoid hypercalcaemia. Parathyroidectomy for refractory/tertiary disease.</p>`}
+      {l:"Management (KDIGO)", html:`<p>Lower high phosphate toward normal (dietary restriction, <b>phosphate binders</b>: calcium-based cautiously, or non-calcium sevelamer/lanthanum). Correct vitamin D deficiency. Control PTH with <b>activated vitamin D</b> (calcitriol) and <b>calcimimetics</b> (cinacalcet, especially in dialysis). Avoid hypercalcaemia. In dialysis, aim to keep PTH roughly <b>2 to 9 times the upper normal limit</b>, treating trends rather than one value. Parathyroidectomy for refractory/tertiary disease.</p>`}
     ],
     pearl:"Do not chase a single PTH or calcium; treat the pattern over time and avoid loading calcium. Phosphate control and avoiding hypercalcaemia protect the vasculature. Tertiary (autonomous) hyperparathyroidism with hypercalcaemia is the one that goes to surgery."},
+  {id:"ckd", cat:"mbd", dx:"Chronic Kidney Disease (Evaluation & Management)",
+    stem:"The foundation. Classify by cause, GFR and albuminuria, then slow progression and cut cardiovascular risk (KDIGO 2024).",
+    fields:[
+      {l:"Definition & classification", html:`<p>Abnormal kidney structure or function for &gt;3 months. Classify by <b>Cause, GFR category (G1-G5), Albuminuria (A1-A3)</b>; risk rises with worse eGFR and albuminuria. Order <b>both eGFR and urine ACR</b> routinely; use <b>cystatin C</b> (or combined creatinine-cystatin) when creatinine-based eGFR is unreliable (low muscle mass, extremes of size).</p>`},
+      {l:"Slow progression", html:`<p><b>SGLT2 inhibitor</b> (T2D + CKD eGFR ≥20; non-diabetic CKD if ACR &gt;20 mg/mmol or heart failure, or eGFR 20-45 with lower ACR). <b>RAS blockade</b> first-line with albuminuria; <b>continue even when eGFR &lt;30</b>. <b>Finerenone</b> for T2D, eGFR &gt;25, normal K, albuminuria despite max RASi. <b>GLP-1 RA</b> (semaglutide, FLOW) for T2D not at glycaemic target. Expect an initial reversible eGFR dip; do not stop.</p>`},
+      {l:"Cardiovascular & complications", html:`<p><b>Statin</b> for adults ≥50 with eGFR &lt;60 (not on dialysis/transplant). Manage <b>anaemia, CKD-MBD, metabolic acidosis, hyperkalaemia</b>. Offer urate-lowering for symptomatic hyperuricaemia, but <b>not</b> for asymptomatic hyperuricaemia to slow CKD.</p>`},
+      {l:"Safety & referral", html:`<p><b>Sick-day rules (SADMANS):</b> withhold SGLT2i, ACEi/ARB, diuretics, metformin, NSAIDs during acute dehydrating illness. Nephrotoxin stewardship. Use the <b>Kidney Failure Risk Equation (KFRE)</b> to guide follow-up and referral.</p>`}
+    ],
+    pearl:"SGLT2i are now for CKD with or without diabetes once eGFR and albuminuria criteria are met, and you continue RASi below an eGFR of 30. Know the sick-day rules and don't panic at the expected initial eGFR dip."},
+  {id:"bpckd", cat:"mbd", dx:"Blood Pressure in CKD",
+    stem:"The KDIGO target is lower than most, but only if you measure it properly.",
+    fields:[
+      {l:"Target", html:`<p>Adults with CKD not on dialysis: <b>systolic BP &lt;120 mmHg</b> when tolerated (KDIGO 2021, from SPRINT), but <b>only using standardised office BP measurement</b>. Applying &lt;120 to casual readings is hazardous.</p>`},
+      {l:"Exceptions", html:`<p><b>Kidney transplant recipients: &lt;130/80.</b> Offer less intensive control in very limited life expectancy or symptomatic postural hypotension.</p>`},
+      {l:"Measurement", html:`<p>Standardised office BP is preferred; complement with <b>ABPM or home BP monitoring</b>. Correct technique (rested, seated, correct cuff, repeated readings) is the whole point.</p>`},
+      {l:"Agents", html:`<p><b>RAS blockade first-line when albuminuria is present</b>; otherwise a dihydropyridine CCB or diuretic. Most patients need more than one agent.</p>`}
+    ],
+    pearl:"The <120 target only applies to standardised measurement; quoting it off a casual clinic BP is the trap. Transplant recipients are the exception at <130/80, and RAS blockade leads when there is albuminuria."},
+  {id:"anaemia", cat:"mbd", dx:"Anaemia of CKD",
+    stem:"Iron first, then an ESA, without chasing a normal haemoglobin.",
+    fields:[
+      {l:"Causes & workup", html:`<p>Multifactorial: reduced erythropoietin, iron deficiency (absolute and functional), inflammation, shortened RBC survival. Work up FBC, <b>ferritin and transferrin saturation</b>, B12/folate, reticulocytes; exclude blood loss.</p>`},
+      {l:"Iron", html:`<p><b>Replace iron first.</b> IV iron is often needed in dialysis and for functional deficiency.</p>`},
+      {l:"ESAs", html:`<p>Erythropoiesis-stimulating agents once iron-replete and other causes excluded. <b>Do not target a normal Hb</b>: aim roughly <b>100-115 g/L</b> and avoid exceeding ~130, because higher targets raise stroke, cardiovascular and thrombotic risk.</p>`},
+      {l:"Newer agents", html:`<p>Oral <b>HIF prolyl-hydroxylase inhibitors</b> are an alternative in some settings; check local availability.</p>`}
+    ],
+    pearl:"Fix the iron before reaching for an ESA, and do not chase a normal haemoglobin: overshooting past ~130 g/L raises cardiovascular and stroke risk. Functional iron deficiency in inflammation is easy to miss."},
   {id:"dialysis", cat:"dialysis", dx:"Dialysis: Indications & Modalities",
     stem:"When to start, which modality, and the complications that bring a dialysis patient to you at 3am.",
     fields:[
@@ -349,6 +376,15 @@ const CARDS = [
       {l:"Long-term", html:`<p>Increased malignancy (skin cancers, EBV-related <b>PTLD</b>), cardiovascular disease, and drug interactions raising tacrolimus levels (azoles, macrolides, diltiazem).</p>`}
     ],
     pearl:"A transplant with a rising creatinine and fever is rejection until proven otherwise, but the biopsy separates rejection from CNI toxicity, BK nephropathy and infection. Never stop immunosuppression without specialist input, and always think CMV and BK in the 1 to 6 month window."},
+  {id:"tx_reject", cat:"transplant", dx:"Transplant Rejection & Immunosuppression",
+    stem:"The two rejection types, how they differ, and the immunosuppression that prevents them.",
+    fields:[
+      {l:"Immunosuppression", html:`<p><b>Induction:</b> T-cell depleting (ATG, alemtuzumab) for high immunological risk, or non-depleting <b>basiliximab</b> (IL-2 receptor antagonist) for standard risk. <b>Maintenance triple therapy:</b> a calcineurin inhibitor (usually <b>tacrolimus</b>) + an antiproliferative (<b>mycophenolate</b>) + prednisolone.</p>`},
+      {l:"T-cell-mediated rejection (TCMR)", html:`<p>Acute cellular rejection: AKI, sometimes graft tenderness. Biopsy shows <b>tubulitis and interstitial inflammation</b> (Banff i and t scores), arteritis if severe. <b>Treat with pulse methylprednisolone</b>; steroid-resistant disease with anti-lymphocyte antibody (ATG). Responds well.</p>`},
+      {l:"Antibody-mediated rejection (ABMR)", html:`<p>Driven by <b>donor-specific antibodies (DSA)</b>. Biopsy shows microvascular inflammation and <b>C4d</b> in peritubular capillaries. Harder to treat, worse prognosis: <b>plasma exchange, IVIG, rituximab</b> and others.</p>`},
+      {l:"The key tension", html:`<p>A rising creatinine may be rejection, <b>CNI (tacrolimus) toxicity</b>, or <b>BK virus nephropathy</b>. Biopsy distinguishes them, because BK is treated by <b>reducing</b> immunosuppression, the opposite of rejection. Check the tacrolimus level and BK/CMV PCR.</p>`}
+    ],
+    pearl:"TCMR is tubulitis, treated with pulse steroids; ABMR is DSA plus C4d, treated with plasma exchange, IVIG and rituximab. The trap is BK nephropathy, which mimics rejection but is treated by reducing immunosuppression, so biopsy before you act."},
   {id:"atn", cat:"aki", dx:"Acute Tubular Necrosis",
     stem:"The commonest intrinsic AKI. Ischaemic or nephrotoxic tubular injury, and mostly a clinical diagnosis.",
     fields:[
@@ -430,14 +466,14 @@ const CARDS = [
     ],
     pearl:"Hydration is the evidence-based prevention; N-acetylcysteine and bicarbonate are not. Do not deny a genuinely indicated contrast study over borderline renal function, because the risk is smaller than the old teaching suggested."},
   {id:"adpkd", cat:"mixed", dx:"Autosomal Dominant Polycystic Kidney Disease",
-    stem:"The commonest inherited kidney disease. Family history, big cystic kidneys, and extrarenal features.",
+    stem:"The commonest inherited kidney disease. Risk-stratify, then treat the rapid progressors (KDIGO 2025).",
     fields:[
-      {l:"Genetics & presentation", html:`<p>Autosomal dominant, <b>PKD1</b> (earlier ESKD) or <b>PKD2</b>. Progressive bilateral renal cysts, early hypertension, flank pain, haematuria, cyst infection, stones, and progressive CKD.</p>`},
-      {l:"Extrarenal", html:`<p>Hepatic cysts, <b>intracranial aneurysms</b> (screen if family history of aneurysm/SAH), cardiac valve disease, diverticular disease, hernias.</p>`},
-      {l:"Investigations", html:`<p>Ultrasound (age-adjusted cyst criteria) or MRI (total kidney volume for prognosis); genetic testing in select cases; family history and BP monitoring.</p>`},
-      {l:"Management", html:`<p>BP control (RAS blockade), high fluid intake, treat complications. <b>Tolvaptan</b> (V2 antagonist) slows rapidly-progressing disease; PBS-listed in Australia for eligible patients (confirm eGFR and rapid-progression criteria; needs LFT monitoring). Manage cardiovascular risk; screen for aneurysm where indicated.</p>`}
+      {l:"Genetics & diagnosis", html:`<p>Autosomal dominant: <b>PKD1</b> (earlier kidney failure) and <b>PKD2</b>, plus several minor genes (slower course). Diagnose by imaging (age-adjusted cyst criteria) or genetic testing. Bilateral cysts, early hypertension, flank pain, haematuria, cyst infection, stones, progressive CKD.</p>`},
+      {l:"Risk stratification (KDIGO 2025)", html:`<p>Stratify with the <b>Mayo Imaging Classification</b> (age/height-adjusted total kidney volume, ideally MRI) and/or the <b>PROPKD score</b>. <b>Rapid progression = eGFR decline ≥3 mL/min/1.73m² per year</b> (or eGFR low for age).</p>`},
+      {l:"Extrarenal", html:`<p>Polycystic liver disease, <b>intracranial aneurysms</b> (screen if family history of aneurysm/SAH or high-risk occupation), cardiac valve disease, diverticular disease, hernias. Increased <b>pre-eclampsia and preterm birth</b> in pregnancy.</p>`},
+      {l:"Management (KDIGO 2025)", html:`<p><b>Four actions:</b> optimal BP, healthy weight, low-salt diet, high water intake. BP: RAS blockade first-line, target <b>&lt;110/75</b> in high-risk adults (age &lt;50, eGFR &gt;60). <b>Tolvaptan</b> (V2 antagonist) for rapid progressors with <b>eGFR ≥25</b>: know the contraindications (pregnancy/planning/breastfeeding, can't manage aquaresis, obstruction, strong CYP3A inhibitors, significant non-PLD liver disease) and <b>mandatory LFTs</b> (baseline, monthly for 18 months, then 3-monthly). PBS-listed in Australia for eligible disease. <b>Stop tolvaptan and RASi before/during pregnancy.</b></p>`}
     ],
-    pearl:"Big palpable kidneys with a family history is ADPKD; check the BP (it rises early) and ask about a family history of brain aneurysm. Tolvaptan slows rapidly-progressing disease but needs the right eligibility and liver-function monitoring."},
+    pearl:"Risk-stratify with the Mayo Imaging Classification or PROPKD; tolvaptan is for rapid progressors (eGFR fall ≥3/year) with eGFR ≥25. It causes aquaresis and needs mandatory LFT monitoring, and it plus RASi must stop before pregnancy."},
   {id:"b_bbn", cat:"behav", dx:"Breaking Bad News",
     stem:"A structured, empathic conversation. SPIKES is your scaffold.",
     fields:[
@@ -823,6 +859,24 @@ const VIGNETTES = [
       {l:"Management pointer", html:`<p>Supportive while awaiting histology: salt restriction, diuretics, RAS blockade, statin, and address the <b>high VTE risk</b> (albumin 18 is strongly prothrombotic). Disease-specific therapy follows the biopsy.</p>`}
     ],
     pearl:"Young woman plus nephrotic syndrome means exclude lupus, and biopsy is essential. Do not forget the thromboembolic risk: with an albumin this low, VTE prophylaxis is a live consideration."},
+  {id:"vg30", cat:"mbd",
+    stem:"A 62-year-old non-diabetic man has CKD with eGFR 38 and urine ACR 60 mg/mmol, on a maximally-tolerated ACE inhibitor. BP 138/84.",
+    q:"What would you add to slow his CKD, and what safety points matter?",
+    fields:[
+      {l:"Framing", html:`<p>Proteinuric non-diabetic CKD (G3b, A3) already on RAS blockade.</p>`},
+      {l:"What to add", html:`<p>An <b>SGLT2 inhibitor</b> (dapagliflozin/empagliflozin): with ACR &gt;20 mg/mmol the kidney benefit applies <b>regardless of diabetes</b> (KDIGO 2024). Ensure a <b>statin</b>, optimise BP toward the standardised <b>&lt;120</b> target, and <b>continue the ACE inhibitor</b> even if eGFR falls further.</p>`},
+      {l:"Safety points", html:`<p>Expect an <b>initial reversible eGFR dip</b> with the SGLT2i; do not stop. Counsel <b>sick-day rules</b> (withhold during acute dehydrating illness). Monitor potassium; brief euglycaemic DKA counselling.</p>`}
+    ],
+    pearl:"SGLT2i are for proteinuric CKD with or without diabetes once ACR and eGFR criteria are met. The expected early eGFR dip is not a reason to stop, and sick-day rules prevent harm."},
+  {id:"vg29", cat:"mixed",
+    stem:"A 32-year-old man with a family history of kidney failure and a brain aneurysm is found to have bilateral enlarged kidneys with multiple cysts. eGFR 78, BP 148/95.",
+    q:"How do you assess his risk and what would you offer?",
+    fields:[
+      {l:"Framing", html:`<p><b>ADPKD</b> (autosomal dominant; likely PKD1 given the family history of early kidney failure).</p>`},
+      {l:"Assess risk", html:`<p>Risk-stratify with the <b>Mayo Imaging Classification</b> (age/height-adjusted total kidney volume, ideally MRI) and/or <b>PROPKD score</b>; rapid progression is an eGFR decline <b>≥3 mL/min/1.73m² per year</b>. Given the family history of aneurysm, offer <b>intracranial aneurysm screening (MRA)</b>.</p>`},
+      {l:"Offer / manage (KDIGO 2025)", html:`<p>The four actions (BP, weight, low salt, high water). RAS blockade with a target <b>&lt;110/75</b> given age &lt;50 and eGFR &gt;60. If he is a rapid progressor with eGFR ≥25, discuss <b>tolvaptan</b> (contraindications, aquaresis, mandatory LFT monitoring). Manage cardiovascular risk.</p>`}
+    ],
+    pearl:"Big cystic kidneys plus a family history of early kidney failure and aneurysm: risk-stratify (Mayo/PROPKD), tighten the BP target to <110/75, offer aneurysm screening for the family history, and discuss tolvaptan if he is a rapid progressor with eGFR ≥25."},
   {id:"bv1", cat:"behav",
     stem:"Behavioural (STAR) · Patient Focus. Full self-driven answer, no probes.",
     q:"Tell us about a time you advocated for a patient whose best interests or wishes conflicted with what others wanted.",
@@ -1005,10 +1059,22 @@ const QUIZ = [
   {id:"q81", cat:"transplant", topic:"Kidney transplant", q:"Give the differential for a rising creatinine in a transplant.", a:"Rejection (T-cell or antibody-mediated), calcineurin inhibitor toxicity, BK nephropathy, CMV, obstruction/urological, dehydration/drugs, and recurrent or de novo GN."},
   {id:"q82", cat:"transplant", topic:"Kidney transplant", q:"Which opportunistic infections dominate 1 to 6 months post-transplant?", a:"CMV, BK virus, PJP and fungal infections, hence valganciclovir and cotrimoxazole prophylaxis."},
   {id:"q83", cat:"transplant", topic:"Kidney transplant", q:"What distinguishes rejection from CNI toxicity or BK nephropathy?", a:"Allograft biopsy (with BK PCR and viral studies), since they can look clinically similar."},
-  {id:"q84", cat:"transplant", topic:"Kidney transplant", q:"Name key long-term risks after transplant.", a:"Malignancy (skin cancers, EBV-related post-transplant lymphoproliferative disorder), cardiovascular disease, and drug interactions raising tacrolimus levels (azoles, macrolides, diltiazem)."}
+  {id:"q84", cat:"transplant", topic:"Kidney transplant", q:"Name key long-term risks after transplant.", a:"Malignancy (skin cancers, EBV-related post-transplant lymphoproliferative disorder), cardiovascular disease, and drug interactions raising tacrolimus levels (azoles, macrolides, diltiazem)."},
+  {id:"q85", cat:"mixed", topic:"ADPKD", q:"How do you risk-stratify ADPKD for progression (KDIGO 2025)?", a:"The Mayo Imaging Classification (age- and height-adjusted total kidney volume, ideally by MRI) and/or the PROPKD score. Rapid progression is an eGFR decline of at least 3 mL/min/1.73m2 per year."},
+  {id:"q86", cat:"mixed", topic:"ADPKD", q:"What are the tolvaptan eligibility and monitoring requirements in ADPKD?", a:"Adults at risk of rapid progression with eGFR at or above 25 and no absolute contraindications (pregnancy/planning/breastfeeding, inability to manage aquaresis, urinary obstruction, strong CYP3A inhibitors, significant non-polycystic liver disease). Mandatory LFTs: baseline, monthly for 18 months, then three-monthly."},
+  {id:"q87", cat:"mixed", topic:"ADPKD", q:"What is the blood pressure target in high-risk ADPKD (KDIGO 2025)?", a:"Below 110/75 in high-risk adults under 50 with eGFR above 60, using RAS blockade first-line."},
+  {id:"q88", cat:"mixed", topic:"ADPKD", q:"When do you screen for intracranial aneurysm in ADPKD?", a:"With a family history of intracranial aneurysm or subarachnoid haemorrhage, high-risk occupations, or before major elective surgery; screen with MR angiography. Also stop tolvaptan and RAS inhibitors before and during pregnancy."},
+  {id:"q89", cat:"mbd", topic:"CKD", q:"When do you start an SGLT2 inhibitor in non-diabetic CKD?", a:"When ACR is above 20 mg/mmol (about 200 mg/g), or there is heart failure, with eGFR at or above 20; also considered for eGFR 20-45 with lower albuminuria. Continue below 20 unless contraindicated."},
+  {id:"q90", cat:"mbd", topic:"CKD", q:"Who should receive a statin in CKD?", a:"Adults aged 50 or older with eGFR below 60 not on dialysis or transplant, and more broadly to reduce atherosclerotic cardiovascular risk."},
+  {id:"q91", cat:"mbd", topic:"CKD", q:"What are the CKD sick-day rules (SADMANS)?", a:"Withhold SGLT2 inhibitors, ACE inhibitors/ARBs, diuretics, metformin and NSAIDs during acute dehydrating illness."},
+  {id:"q92", cat:"mbd", topic:"CKD", q:"Do you stop RAS blockade when eGFR falls below 30?", a:"No; continue the ACE inhibitor or ARB even below an eGFR of 30, unless there is a specific problem such as hyperkalaemia or symptomatic hypotension."},
+  {id:"q93", cat:"mbd", topic:"Blood pressure in CKD", q:"What is the KDIGO 2021 systolic BP target in CKD, and the key caveat?", a:"Below 120 mmHg when tolerated, but only using standardised office BP measurement. Kidney transplant recipients target below 130/80."},
+  {id:"q94", cat:"mbd", topic:"Anaemia of CKD", q:"What is the haemoglobin target when using an ESA in CKD?", a:"Do not target a normal haemoglobin; aim roughly 100 to 115 g/L and avoid exceeding about 130, and ensure iron repletion first."},
+  {id:"q95", cat:"transplant", topic:"Transplant rejection", q:"How do you treat T-cell-mediated versus antibody-mediated rejection?", a:"TCMR (tubulitis): pulse methylprednisolone, and anti-lymphocyte antibody (ATG) if steroid-resistant. ABMR (donor-specific antibodies plus C4d): plasma exchange, IVIG and rituximab."},
+  {id:"q96", cat:"transplant", topic:"Transplant rejection", q:"A transplant patient has a rising creatinine; why must you not assume rejection?", a:"It may be calcineurin inhibitor (tacrolimus) toxicity or BK virus nephropathy, which is treated by reducing immunosuppression, the opposite of rejection. Biopsy, tacrolimus level and BK/CMV PCR distinguish them."}
 ];
 
-const CAT_NAME = {nephritic:"Nephritic pattern", nephrotic:"Nephrotic pattern", mixed:"Mixed / variable", aki:"Acute kidney injury", lytes:"Fluid & electrolytes", mbd:"CKD-MBD", dialysis:"Dialysis", transplant:"Transplant", behav:"Behavioural"};
+const CAT_NAME = {nephritic:"Nephritic pattern", nephrotic:"Nephrotic pattern", mixed:"Mixed / variable", aki:"Acute kidney injury", lytes:"Fluid & electrolytes", mbd:"CKD & complications", dialysis:"Dialysis", transplant:"Transplant", behav:"Behavioural"};
 const STORE_KEY = "gn_flashcards_issy_v2";
 
 let mode = "cards";
